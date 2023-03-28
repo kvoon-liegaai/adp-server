@@ -1,4 +1,5 @@
 // use/entities/user.entity.ts
+import { Role } from 'src/role/role.enum';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('user')
@@ -26,8 +27,8 @@ export class User {
   @Column()
   email: string;
 
-  @Column('simple-enum', { enum: ['root', 'admin', 'common'] })
-  role: string;   // 用户角色
+  @Column('simple-enum', { enum: Array<Role> })
+  role: Role[];   // 用户角色
 
   @Column({
     name: 'create_time',

@@ -1,13 +1,14 @@
-import { Body, Controller, Get, Inject, Post,  UseGuards, Request } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Post,  UseGuards, Request, Logger } from '@nestjs/common';
 import { ApiOperation } from '@nestjs/swagger';
 import { AppService } from './app.service';
 import { AuthService } from './auth/auth.service';
 import { JwtAuthGuard } from './auth/jwt_auth.guard';
 import { LocalAuthGuard } from './auth/local_auth.guard';
-import { Public } from './decorator';
+import { Public } from './decorator/public.decorator';
 
 @Controller()
 export class AppController {
+  private readonly logger = new Logger(AppController.name)
   constructor(
     private readonly appService: AppService,
     @Inject(AuthService)
@@ -24,7 +25,9 @@ export class AppController {
   @UseGuards(LocalAuthGuard)
   @Post('auth/login')
   async login(@Body() user: any) {
-    return this.authService.login(user)
+    const theUser = await this.authService.login(user)
+    this.logger.debug('theUser', theUser);
+    return theUser
   }
 
   @ApiOperation({summary: '获取用户资料'})

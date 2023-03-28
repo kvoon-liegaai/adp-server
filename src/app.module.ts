@@ -9,6 +9,7 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core/constants';
 import { JwtAuthGuard } from './auth/jwt_auth.guard';
+import { RolesGuard } from './role/role.guard';
 
 @Module({
   imports: [
@@ -30,10 +31,13 @@ import { JwtAuthGuard } from './auth/jwt_auth.guard';
   controllers: [AppController],
   providers: [
     AppService,
-    // 全局 jwt
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
     },
   ],
 })

@@ -3,7 +3,7 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { User } from './entities/user.entity';
-import { Public } from 'src/decorator';
+import { Public } from 'src/decorator/public.decorator';
 
 @Controller('user')
 export class UserController {
