@@ -1,6 +1,8 @@
 // use/entities/user.entity.ts
+import type { Field } from 'mysql2';
+import { HelpResource } from 'src/help_resource/entities/help_resource.entity';
 import { Role } from 'src/role/role.enum';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('user')
 export class User {
@@ -43,4 +45,13 @@ export class User {
     default: () => 'CURRENT_TIMESTAMP',
   })
   updateTime: Date;
+
+  @OneToMany(() => HelpResource, (helpResource) => helpResource.user)
+  @Column({
+    type: 'json',
+    array: true,
+    nullable: true,
+    default: null
+  })
+  helpResource: HelpResource[] | null
 }

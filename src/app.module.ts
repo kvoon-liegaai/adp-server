@@ -10,9 +10,9 @@ import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core/constants';
 import { JwtAuthGuard } from './auth/jwt_auth.guard';
 import { RolesGuard } from './role/role.guard';
-import { HelpModule } from './help/help.module';
 import { ChatModule } from './chat/chat.module';
 import { HelpResourceModule } from './help_resource/help_resource.module';
+import { HelpResource } from './help_resource/entities/help_resource.entity';
 
 @Module({
   imports: [
@@ -26,13 +26,16 @@ import { HelpResourceModule } from './help_resource/help_resource.module';
       username: 'root',
       password: '1',
       database: 'aid-platform-db',
-      entities: [ User ],
+      // entities: [ User, HelpResource ],
+      "entities": [
+        __dirname + "entities/**/*.entity.ts"
+      ],
+      autoLoadEntities: true,
     }),
     UserModule,
     AuthModule,
-    HelpModule,
     ChatModule,
-    HelpResourceModule
+    HelpResourceModule,
   ] ,
   controllers: [AppController],
   providers: [
