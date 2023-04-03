@@ -10,6 +10,9 @@ import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core/constants';
 import { JwtAuthGuard } from './auth/jwt_auth.guard';
 import { RolesGuard } from './role/role.guard';
+import { HelpModule } from './help/help.module';
+import { ChatModule } from './chat/chat.module';
+import { HelpResourceModule } from './help_resource/help_resource.module';
 
 @Module({
   imports: [
@@ -29,7 +32,10 @@ import { RolesGuard } from './role/role.guard';
       // synchronize: true,
     }),
     UserModule,
-    AuthModule
+    AuthModule,
+    HelpModule,
+    ChatModule,
+    HelpResourceModule
   ] ,
   controllers: [AppController],
   providers: [
