@@ -21,6 +21,7 @@ export class CreateUserDto {
   @IsString()
   email: string;
 
+  @ApiProperty()
   @IsEnum(Role)
   role: Role[]
 }

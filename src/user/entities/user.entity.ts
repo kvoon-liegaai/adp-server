@@ -27,7 +27,7 @@ export class User {
   @Column()
   email: string;
 
-  @Column('simple-enum', { enum: Array<Role> })
+  @Column({type: 'simple-enum',  enum: Array<Role>, default: Role.Root})
   role: Role[];   // 用户角色
 
   @Column({

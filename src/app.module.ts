@@ -21,9 +21,12 @@ import { RolesGuard } from './role/role.guard';
       host: 'localhost',
       port: 3306,
       username: 'root',
-      password: '1',
+      // password: '1',
+      // co
+      password: '1234',
       database: 'aid-platform-db',
       entities: [ User ],
+      // synchronize: true,
     }),
     UserModule,
     AuthModule

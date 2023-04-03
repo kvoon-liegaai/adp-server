@@ -2,5 +2,20 @@
   "cSpell.words": [
     "nestjs",
     "typeorm"
+  ],
+  "sqltools.connections": [
+    {
+      "mysqlOptions": {
+        "authProtocol": "default"
+      },
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 3306,
+      "driver": "MySQL",
+      "name": "kvoon",
+      "username": "root",
+      "database": "aid-platform-db",
+      "askForPassword": true
+    }
   ]
 }
