@@ -10,9 +10,9 @@ import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core/constants';
 import { JwtAuthGuard } from './auth/jwt_auth.guard';
 import { RolesGuard } from './role/role.guard';
-import { HelpModule } from './help/help.module';
 import { ChatModule } from './chat/chat.module';
 import { HelpResourceModule } from './help_resource/help_resource.module';
+import { Role } from './role/role.enum';
 
 @Module({
   imports: [
@@ -29,11 +29,10 @@ import { HelpResourceModule } from './help_resource/help_resource.module';
       password: '1234',
       database: 'aid-platform-db',
       entities: [ User ],
-      // synchronize: true,
+      synchronize: true,
     }),
     UserModule,
     AuthModule,
-    HelpModule,
     ChatModule,
     HelpResourceModule
   ] ,
