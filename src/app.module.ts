@@ -12,7 +12,7 @@ import { JwtAuthGuard } from './auth/jwt_auth.guard';
 import { RolesGuard } from './role/role.guard';
 import { ChatModule } from './chat/chat.module';
 import { HelpResourceModule } from './help_resource/help_resource.module';
-import { Role } from './role/role.enum';
+import { HelpResource } from './help_resource/entities/help_resource.entity';
 
 @Module({
   imports: [
@@ -24,17 +24,18 @@ import { Role } from './role/role.enum';
       host: 'localhost',
       port: 3306,
       username: 'root',
-      // password: '1',
-      // co
-      password: '1234',
+      password: '1',
       database: 'aid-platform-db',
-      entities: [ User ],
-      synchronize: true,
+      // entities: [ User, HelpResource ],
+      "entities": [
+        __dirname + "entities/**/*.entity.ts"
+      ],
+      autoLoadEntities: true,
     }),
     UserModule,
     AuthModule,
     ChatModule,
-    HelpResourceModule
+    HelpResourceModule,
   ] ,
   controllers: [AppController],
   providers: [
