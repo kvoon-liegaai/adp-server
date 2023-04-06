@@ -22,5 +22,8 @@ export class HelpResource {
   endDate: string
 
   @Column({type: 'json'})
-  geo: Record<string, any>
+  lnglat: {
+    longitude: number,
+    latitude: number
+  }
 }

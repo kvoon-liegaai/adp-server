@@ -14,11 +14,13 @@ export class UserService {
   async register(createUser: CreateUserDto) {
     const { username } = createUser;
 
-    const existUser = await this.userRepository.findOne({
-      where: { username },
-    });
-    if(existUser){
+    if(await this.userRepository.exist()) {
+      const existUser = await this.userRepository.findOneBy({
+        username
+      })
+      if(existUser){
         throw new HttpException("用户名已存在", HttpStatus.BAD_REQUEST)
+      }
     }
 
     const newUser = await this.userRepository.create(createUser)
@@ -26,8 +28,8 @@ export class UserService {
   }
 
   async findOneByUserName(username: string) {
-    const user = await this.userRepository.findOne({
-      where: { username }
+    const user = await this.userRepository.findOneBy({
+      username
     })
 
     if(!user) {

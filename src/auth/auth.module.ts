@@ -7,13 +7,15 @@ import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from './constants';
 import { JwtStrategy } from './jwt.strategy';
 
+const day = (num: number) => 60 * 24 * num
+
 @Module({
   imports: [
     UserModule,
     PassportModule,
     JwtModule.register({
     secret: jwtConstants.secret,
-    signOptions: { expiresIn: '600s' },
+    signOptions: { expiresIn: `${day(7)}s` },
   })],
   providers: [AuthService, LocalStrategy, JwtStrategy],
   exports: [ AuthService ],

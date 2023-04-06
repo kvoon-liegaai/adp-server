@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger"
-import { IsJSON, IsString } from "class-validator"
+import { IsJSON, IsString, ValidateNested } from "class-validator"
 
 export class CreateHelpResourceDto {
   @ApiProperty()
@@ -19,6 +19,13 @@ export class CreateHelpResourceDto {
   endDate: string
 
   @ApiProperty()
-  @IsJSON()
-  geo: Record<string, any>
+  @ValidateNested()
+  // @IsJSON()
+  lnglat: {
+    longitude: number,
+    latitude: number
+  }
+
+  @ApiProperty()
+  userId: number
 }

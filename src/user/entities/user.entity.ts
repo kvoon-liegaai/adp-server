@@ -1,13 +1,12 @@
 // use/entities/user.entity.ts
-import type { Field } from 'mysql2';
 import { HelpResource } from 'src/help_resource/entities/help_resource.entity';
 import { Role } from 'src/role/role.enum';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('user')
 export class User {
-  @PrimaryGeneratedColumn('uuid')
-  id: number;
+  @PrimaryGeneratedColumn()
+  id: number
 
   @Column({ length: 100 })
   username: string; // 用户名
@@ -29,8 +28,13 @@ export class User {
   @Column()
   email: string;
 
-  @Column({type: 'simple-enum',  enum: Array<Role>, default: Role.Root})
-  role: Role[];   // 用户角色
+  @Column({
+    name:'roles',
+    type: 'enum',
+    enum: Role,
+    default: [Role.Root]
+  })
+  roles: Role[];   // 用户角色
 
   @Column({
     name: 'create_time',
@@ -47,11 +51,5 @@ export class User {
   updateTime: Date;
 
   @OneToMany(() => HelpResource, (helpResource) => helpResource.user)
-  @Column({
-    type: 'json',
-    array: true,
-    nullable: true,
-    default: null
-  })
-  helpResource: HelpResource[] | null
+  helpResource: HelpResource[]
 }
