@@ -13,6 +13,7 @@ import { ChatModule } from './chat/chat.module';
 import { HelpResourceModule } from './help_resource/help_resource.module';
 import { HelpResource } from './help_resource/entities/help_resource.entity';
 import { User } from './user/entities/user.entity';
+import { Location } from './location/entity/location.entity';
 
 @Module({
   imports: [
@@ -27,11 +28,11 @@ import { User } from './user/entities/user.entity';
       // password: '1',
       password: '1234',
       database: 'aid-platform-db',
-      entities: [ User, HelpResource ],
+      entities: [ User, HelpResource, Location ],
       // "entities": [
       //   __dirname + "entities/**/*.entity.ts"
       // ],
-      // synchronize: true,
+      synchronize: true,
     }),
     UserModule,
     AuthModule,

@@ -1,5 +1,6 @@
 import { User } from "src/user/entities/user.entity"
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm"
+import { Column, Entity,  ManyToOne, PrimaryGeneratedColumn } from "typeorm"
+import { Location } from "src/location/entity/location.entity"
 
 @Entity('helpResource')
 export class HelpResource {
@@ -21,9 +22,11 @@ export class HelpResource {
   @Column()
   endDate: string
 
-  @Column({type: 'json'})
-  lnglat: {
-    longitude: number,
-    latitude: number
-  }
+  // @Column(() => Location)
+  // location: Location
+  @Column({type: 'float',default: () => 0.0})
+  longitude: number
+
+  @Column({type: 'float',default: () => 0.0})
+  latitude: number
 }
