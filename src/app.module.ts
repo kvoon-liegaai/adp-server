@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Dependencies, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
@@ -14,7 +14,9 @@ import { HelpResourceModule } from './help_resource/help_resource.module';
 import { HelpResource } from './help_resource/entities/help_resource.entity';
 import { User } from './user/entities/user.entity';
 import { Location } from './location/entity/location.entity';
+import { DataSource } from 'typeorm';
 
+@Dependencies(DataSource)
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -25,14 +27,14 @@ import { Location } from './location/entity/location.entity';
       host: 'localhost',
       port: 3306,
       username: 'root',
-      // password: '1',
-      password: '1234',
+      password: '1',
+      // password: '1234',
       database: 'aid-platform-db',
       entities: [ User, HelpResource, Location ],
       // "entities": [
       //   __dirname + "entities/**/*.entity.ts"
       // ],
-      // synchronize: true,
+      synchronize: true,
     }),
     UserModule,
     AuthModule,
@@ -52,4 +54,9 @@ import { Location } from './location/entity/location.entity';
     },
   ],
 })
-export class AppModule {}
+export class AppModule {
+  dataSource: DataSource;
+  constructor(dataSource) {
+    this.dataSource = dataSource;
+  }
+}

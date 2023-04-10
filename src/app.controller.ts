@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Inject, Post,  UseGuards, Request, Logger } from '@nestjs/common';
+import { Controller, Get, Inject, Post,  UseGuards, Request, Logger } from '@nestjs/common';
 import { ApiOperation } from '@nestjs/swagger';
 import { AppService } from './app.service';
 import { AuthService } from './auth/auth.service';
@@ -15,17 +15,13 @@ export class AppController {
     private readonly authService: AuthService
   ) {}
 
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
-  }
-
   @ApiOperation({summary: '登录'})
   @Public()
   @UseGuards(LocalAuthGuard)
   @Post('auth/login')
-  async login(@Body() user: any) {
-    const theUser = await this.authService.login(user)
+  async login(@Request() req) {
+    const theUser = await this.authService.login(req.user)
+    console.log('theUser',theUser)
     this.logger.debug('theUser', theUser);
     return theUser
   }

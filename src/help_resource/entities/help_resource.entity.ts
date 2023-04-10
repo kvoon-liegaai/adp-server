@@ -30,7 +30,7 @@ export class HelpResource {
   @Column({type: 'float',default: () => 0.0})
   latitude: number
 
-  @ManyToMany(() => User, (user) => user.helpResource)
-  user: User[]
+  @ManyToMany(() => User, (user) => user.helpResources)
+  users: User[]
 
 }

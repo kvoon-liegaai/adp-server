@@ -52,11 +52,13 @@ export class User {
   })
   updateTime: Date;
 
-  @ManyToMany(() => HelpResource, (helpResource) => helpResource.user)
+  @ManyToMany(() => HelpResource, (helpResource) => helpResource.users, {
+    cascade: true
+  })
   @JoinTable({
     name: 'user_resource',
     joinColumns: [{ name: 'user_id' }],
     inverseJoinColumns: [{ name: 'resource_id' }],
   })
-  helpResource: HelpResource[]
+  helpResources: HelpResource[]
 }

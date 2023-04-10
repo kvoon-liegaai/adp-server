@@ -1,11 +1,14 @@
 import { Controller, Post, Body, Query } from '@nestjs/common';
 import { HelpResourceService } from './help_resource.service';
-import { CreateHelpResourceDto, CreateHelpResourceDtoOrigin } from './dto/create-help_resource.dto';
-import { instanceToPlain, plainToClass } from 'class-transformer';
+import { CreateHelpResourceDto } from './dto/create-help_resource.dto';
+import { DataSource } from 'typeorm';
 
 @Controller('help-resource')
 export class HelpResourceController {
-  constructor(private readonly helpResourceService: HelpResourceService) {}
+  constructor(
+    private readonly helpResourceService: HelpResourceService,
+    private dataSource: DataSource,
+  ) {}
 
   // @Post()
   // async create(@Body() createHelpResourceDtoOrigin: CreateHelpResourceDtoOrigin) {

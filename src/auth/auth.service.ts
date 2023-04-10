@@ -25,7 +25,6 @@ export class AuthService {
 
   // real login unsafe
   async login(user: any) { // user without password
-    this.logger.log('!!!!!!!!!!!!!!!!!!!', user);
     const payload = { username: user.username , sub: user.id };
     return {
       access_token: this.jwtService.sign(payload),
