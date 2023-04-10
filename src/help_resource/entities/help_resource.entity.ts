@@ -1,5 +1,5 @@
 import { User } from "src/user/entities/user.entity"
-import { Column, Entity,  ManyToOne, PrimaryGeneratedColumn } from "typeorm"
+import { Column, Entity,  ManyToMany,  ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm"
 import { Location } from "src/location/entity/location.entity"
 
 @Entity('helpResource')
@@ -7,8 +7,8 @@ export class HelpResource {
   @PrimaryGeneratedColumn()
   id: number
 
-  @ManyToOne(() => User, (user) => user.helpResource)
-  user: User
+  @Column()
+  userId: number
 
   @Column()
   name: string
@@ -29,4 +29,8 @@ export class HelpResource {
 
   @Column({type: 'float',default: () => 0.0})
   latitude: number
+
+  @ManyToMany(() => User, (user) => user.helpResource)
+  user: User[]
+
 }

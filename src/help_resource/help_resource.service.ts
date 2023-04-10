@@ -11,6 +11,7 @@ export class HelpResourceService {
     private helpResourceRepository: Repository<HelpResource>,
   ) {}
   async create(createHelpResourceDto: CreateHelpResourceDto) {
+    console.log('createHelpResourceDto',createHelpResourceDto)
     const newHelpResource = await this.helpResourceRepository.create(createHelpResourceDto)
     return await this.helpResourceRepository.save(newHelpResource)
   }

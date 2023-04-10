@@ -1,7 +1,8 @@
 // use/entities/user.entity.ts
+import { Exclude } from 'class-transformer';
 import { HelpResource } from 'src/help_resource/entities/help_resource.entity';
 import { Role } from 'src/role/role.enum';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('user')
 export class User {
@@ -15,11 +16,12 @@ export class User {
   nickname: string;  //昵称
 
   @Column()
+  @Exclude()
   // @Column({select: false})
   password: string;  // 密码
 
   @Column({
-    name: '头像',
+    name: 'avatar',
     default: '123'
     // default: () => 'https://i.pravatar.cc/300'
   })
@@ -50,6 +52,11 @@ export class User {
   })
   updateTime: Date;
 
-  @OneToMany(() => HelpResource, (helpResource) => helpResource.user)
+  @ManyToMany(() => HelpResource, (helpResource) => helpResource.user)
+  @JoinTable({
+    name: 'user_resource',
+    joinColumns: [{ name: 'user_id' }],
+    inverseJoinColumns: [{ name: 'resource_id' }],
+  })
   helpResource: HelpResource[]
 }

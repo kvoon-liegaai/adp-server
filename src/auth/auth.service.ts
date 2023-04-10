@@ -17,6 +17,7 @@ export class AuthService {
     if (user && user.password === pass) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { password, ...result } = user 
+      console.log('result',result)
       return result 
     }
     return null;
@@ -24,7 +25,7 @@ export class AuthService {
 
   // real login unsafe
   async login(user: any) { // user without password
-    this.logger.log(user);
+    this.logger.log('!!!!!!!!!!!!!!!!!!!', user);
     const payload = { username: user.username , sub: user.id };
     return {
       access_token: this.jwtService.sign(payload),

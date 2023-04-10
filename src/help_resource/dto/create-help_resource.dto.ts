@@ -54,6 +54,7 @@ export class CreateHelpResourceDto extends AddressableDto {
   endDate: string
 
   @ApiProperty()
+  @IsNumber()
   userId: number
   // constructor() {
   //   super()

@@ -37,4 +37,13 @@ export class UserService {
     }
     return user;
   }
+
+  async getProfileByUserId(userId: number) {
+    const user = await this.userRepository.findOne({ where: { id: userId } })
+    if(!user) {
+      throw new HttpException('用户不存在', HttpStatus.NO_CONTENT)
+    }
+    console.log('user',user)
+    return user
+  }
 }

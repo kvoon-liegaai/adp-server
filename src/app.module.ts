@@ -32,7 +32,7 @@ import { Location } from './location/entity/location.entity';
       // "entities": [
       //   __dirname + "entities/**/*.entity.ts"
       // ],
-      synchronize: true,
+      // synchronize: true,
     }),
     UserModule,
     AuthModule,
