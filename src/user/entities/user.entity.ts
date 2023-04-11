@@ -22,7 +22,7 @@ export class User {
 
   @Column({
     name: 'avatar',
-    default: '123'
+    default: ''
     // default: () => 'https://i.pravatar.cc/300'
   })
   avatar: string;
@@ -37,6 +37,9 @@ export class User {
     default: [Role.Root]
   })
   roles: Role[];   // 用户角色
+
+  @Column({default: ''})
+  describe: string
 
   @Column({
     name: 'create_time',

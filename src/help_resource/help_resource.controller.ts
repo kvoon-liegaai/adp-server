@@ -1,13 +1,11 @@
-import { Controller, Post, Body, Query } from '@nestjs/common';
+import { Controller, Post, Body, Get, ParseIntPipe, Param } from '@nestjs/common';
 import { HelpResourceService } from './help_resource.service';
 import { CreateHelpResourceDto } from './dto/create-help_resource.dto';
-import { DataSource } from 'typeorm';
 
 @Controller('help-resource')
 export class HelpResourceController {
   constructor(
     private readonly helpResourceService: HelpResourceService,
-    private dataSource: DataSource,
   ) {}
 
   // @Post()
@@ -27,5 +25,15 @@ export class HelpResourceController {
   async create(@Body() createHelpResourceDto: CreateHelpResourceDto) {
     console.log('createHelpResourceDto',createHelpResourceDto)
     return await this.helpResourceService.create(createHelpResourceDto);
+  }
+
+  @Get()
+  async findAll() {
+    return await this.helpResourceService.findAll()
+  }
+
+  @Get(':id')
+  async findAllByUserId(@Param('id', ParseIntPipe) id:number) {
+    return await this.helpResourceService.findAllByUserId(id)
   }
 }

@@ -28,8 +28,13 @@ export class UserService {
     return await this.userRepository.save(newUser);
   }
 
-  async findOneById(id: number) {
-    const user = await this.userRepository.findOneBy({ id })
+  async findOneById(id: number, relation = false) {
+    const user = !relation
+      ? await this.userRepository.findOneBy({ id })
+      : await this.userRepository.findOne({ 
+        where: { id, },
+        relations: ['helpResources']
+      })
 
     if(!user) {
       throw new HttpException('用户不存在', HttpStatus.NO_CONTENT)
@@ -66,10 +71,6 @@ export class UserService {
     if(!user?.helpResources) user.helpResources = []
 
     user.helpResources.push(helpResource)
-    
-
-    console.log('@@@@@@@@@user',user)
-
     await this.userRepository.save(user)
 
     return '更新成功'
