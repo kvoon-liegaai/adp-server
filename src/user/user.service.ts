@@ -63,7 +63,7 @@ export class UserService {
   }
 
   async addHelpResource(userId: number, helpResource: HelpResource) {
-    const user = await this.findOneById(userId)
+    const user = await this.findOneById(userId, true)
     if(!user) {
       throw new HttpException('用户不存在', HttpStatus.NO_CONTENT)
     }
