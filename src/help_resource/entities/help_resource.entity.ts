@@ -7,6 +7,7 @@ export enum HelpResourceStatus {
   FULFILL,
   CANCELED,
   ONGOING,
+  DELETE
 }
 
 @Entity('helpResource')

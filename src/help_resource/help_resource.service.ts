@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { HttpCode, HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateHelpResourceDto } from './dto/create-help_resource.dto';
@@ -45,6 +45,11 @@ export class HelpResourceService {
     const hr = await this.findOneById(id)
     hr.status = status
     await this.helpResourceRepository.save(hr)
+  }
+
+  @HttpCode(200)
+  async delete(id: number) {
+    await this.helpResourceRepository.delete(id)
   }
 
   async addUser(userId: number, hrId) {
