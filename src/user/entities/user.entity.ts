@@ -55,7 +55,7 @@ export class User {
   })
   updateTime: Date;
 
-  @ManyToMany(() => HelpResource, (helpResource) => helpResource.users, {
+  @OneToMany(() => HelpResource, (helpResource) => helpResource.user, {
     cascade: true
   })
   @JoinTable({

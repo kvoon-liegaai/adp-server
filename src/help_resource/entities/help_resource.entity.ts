@@ -16,22 +16,22 @@ export class HelpResource {
   id: number
 
   @Column()
-  userId: number
-
-  @Column()
   name: string
 
   @Column()
   subArea: string
 
   @Column()
+  tag: string
+
+  @Column()
   describe: string
 
   @Column()
-  startDate: string
+  start_date: string
 
   @Column()
-  endDate: string
+  end_date: string
 
   @Column({type: 'enum', enum: HelpResourceStatus, default: HelpResourceStatus.PENDING})
   status: HelpResourceStatus
@@ -51,7 +51,9 @@ export class HelpResource {
   @Column({type: 'float',default: () => 0.0})
   latitude: number
 
-  @ManyToMany(() => User, (user) => user.helpResources)
-  users: User[]
+  @ManyToOne(() => User, (user) => user.helpResources)
+  user:User
 
+  @ManyToOne(() => User, (user) => user.helpResources)
+  receiver?: User
 }

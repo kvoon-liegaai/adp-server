@@ -15,6 +15,7 @@ import { HelpResource } from './help_resource/entities/help_resource.entity';
 import { User } from './user/entities/user.entity';
 import { Location } from './location/entity/location.entity';
 import { DataSource } from 'typeorm';
+import { EvaluationModule } from './evaluation/evaluation.module';
 
 @Dependencies(DataSource)
 @Module({
@@ -40,6 +41,7 @@ import { DataSource } from 'typeorm';
     AuthModule,
     ChatModule,
     HelpResourceModule,
+    EvaluationModule,
   ] ,
   controllers: [AppController],
   providers: [

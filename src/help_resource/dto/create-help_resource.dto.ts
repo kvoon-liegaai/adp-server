@@ -13,15 +13,15 @@ export class CreateHelpResourceDto extends AddressableDto {
 
   @ApiProperty()
   @IsString()
-  startDate: string
+  tag: string
 
   @ApiProperty()
   @IsString()
-  endDate: string
+  start_date: string
 
   @ApiProperty()
-  @IsNumber()
-  userId: number
+  @IsString()
+  end_date: string
 
   @ApiProperty()
   @IsString()

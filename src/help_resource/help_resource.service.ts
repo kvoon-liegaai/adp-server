@@ -15,11 +15,16 @@ export class HelpResourceService {
     private userService: UserService
   ) {}
 
-  async create(createHelpResourceDto: CreateHelpResourceDto) {
+  async create(userId: number, createHelpResourceDto: CreateHelpResourceDto) {
     console.log('createHelpResourceDto',createHelpResourceDto)
-    const userId = createHelpResourceDto.userId
-    const newHelpResource = await this.helpResourceRepository.create(createHelpResourceDto)
-    await this.userService.addHelpResource(userId, newHelpResource)
+    const user = await this.userService.findOneById(userId)
+
+    const newHelpResource = await this.helpResourceRepository.create({
+      ...createHelpResourceDto,
+      user: user,
+      receiver: null,
+    })
+    console.log('newHelpResource',newHelpResource)
     return await this.helpResourceRepository.save(newHelpResource)
   }
 
@@ -41,6 +46,10 @@ export class HelpResourceService {
     return user.helpResources
   }
 
+  async findAllByTag(tag: string) {
+    return await this.helpResourceRepository.find({ where: { tag }, relations: ['user', 'receiver']})
+  }
+
   async updateStatus(id: number, status: HelpResourceStatus) {
     const hr = await this.findOneById(id)
     hr.status = status
@@ -52,17 +61,5 @@ export class HelpResourceService {
     await this.helpResourceRepository.delete(id)
   }
 
-  async addUser(userId: number, hrId) {
-    const hr = await this.findOneById(hrId)
-    const user = await this.userService.findOneById(userId)
-
-    if(hr.userId === userId) throw new HttpException('不能添加自己的服务', HttpStatus.NOT_ACCEPTABLE)
-
-    if(hr && user) {
-      hr.users.push(user)
-      return await this.helpResourceRepository.save(hr)
-    }
-    else
-      throw new HttpException('用户或互助资源不存在', HttpStatus.NOT_FOUND)
-  }
+  // async addReceiver() {}
 }

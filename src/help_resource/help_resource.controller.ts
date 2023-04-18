@@ -9,23 +9,13 @@ export class HelpResourceController {
     private readonly helpResourceService: HelpResourceService,
   ) {}
 
-  // @Post()
-  // async create(@Body() createHelpResourceDtoOrigin: CreateHelpResourceDtoOrigin) {
-  //   console.log('createHelpResourceDtoOrigin',createHelpResourceDtoOrigin)
-  //   const plain = instanceToPlain(createHelpResourceDtoOrigin)
-  //   for (const [key, value] of Object.entries(createHelpResourceDtoOrigin.location)) {
-  //     plain[`location${key.charAt(0).toUpperCase()}${key.slice(1)}`] = value;
-  //   }
-  //   delete plain.location
-  //   console.log('plain',plain)
-  //   const createHelpResourceDto = plainToClass(CreateHelpResourceDto, plain)
-  //   console.log('createHelpResourceDto',createHelpResourceDto)
-  //   return await this.helpResourceService.create(createHelpResourceDto);
-  // }
   @Post()
-  async create(@Body() createHelpResourceDto: CreateHelpResourceDto) {
+  async create(
+    @Req() req: any,
+    @Body() createHelpResourceDto: CreateHelpResourceDto
+    ) {
     console.log('createHelpResourceDto',createHelpResourceDto)
-    return await this.helpResourceService.create(createHelpResourceDto);
+    return await this.helpResourceService.create(req.user.id, createHelpResourceDto);
   }
 
   @Get()
@@ -41,9 +31,16 @@ export class HelpResourceController {
   @Delete(':id')
   async delete(@Param('id', ParseIntPipe, ) id:number, @Req() req:any){
     const res = await this.helpResourceService.findOneById(id)
-    if(res.userId === req.user.id)
+    if(res.user === req.user.id)
       await this.helpResourceService.delete(id)
     else
       throw new HttpException('无权删除', HttpStatus.NOT_ACCEPTABLE)
+  }
+
+  @Get('tag/:tag')
+  async findAllByTag(@Param('tag') encodedTag: string) {
+    const tag = decodeURIComponent(encodedTag)
+    console.log('tag',tag)
+    return await this.helpResourceService.findAllByTag(tag);
   }
 }

@@ -61,18 +61,4 @@ export class UserService {
     console.log('user',user)
     return user
   }
-
-  async addHelpResource(userId: number, helpResource: HelpResource) {
-    const user = await this.findOneById(userId, true)
-    if(!user) {
-      throw new HttpException('用户不存在', HttpStatus.NO_CONTENT)
-    }
-
-    if(!user?.helpResources) user.helpResources = []
-
-    user.helpResources.push(helpResource)
-    await this.userRepository.save(user)
-
-    return '更新成功'
-  }
 }
