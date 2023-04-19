@@ -1,10 +1,9 @@
 import { HttpCode, HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import {  Not, Repository } from 'typeorm';
 import { CreateHelpResourceDto } from './dto/create-help_resource.dto';
-import { HelpResource, HelpResourceStatus } from './entities/help_resource.entity';
+import { HelpResource, helpResourceStatus, HelpResourceStatus } from './entities/help_resource.entity';
 import { UserService } from 'src/user/user.service';
-import { UpdateHelpResourceDto } from './dto/update-help_resource.dto';
 
 @Injectable()
 export class HelpResourceService {
@@ -14,6 +13,8 @@ export class HelpResourceService {
     @Inject(UserService)
     private userService: UserService
   ) {}
+
+  // create
 
   async create(userId: number, createHelpResourceDto: CreateHelpResourceDto) {
     console.log('createHelpResourceDto',createHelpResourceDto)
@@ -27,6 +28,8 @@ export class HelpResourceService {
     console.log('newHelpResource',newHelpResource)
     return await this.helpResourceRepository.save(newHelpResource)
   }
+
+  // find
 
   async findAll() {
     return await this.helpResourceRepository.find();
@@ -46,15 +49,56 @@ export class HelpResourceService {
     return user.helpResources
   }
 
+  // find tag
+
   async findAllByTag(tag: string) {
     return await this.helpResourceRepository.find({ where: { tag }, relations: ['user', 'receiver']})
   }
+
+  // find receiver
+
+  async findReceiverAll(userId: number) {
+    return await this.helpResourceRepository.find({ where: { receiver: { id: userId } }})
+  }
+
+  async findReceiverAllWithStatus(userId: number, status: HelpResourceStatus) {
+    return await this.helpResourceRepository.find({
+      where: {
+        receiver: { id: userId  },
+        status
+      }
+    })
+  }
+
+  // find provider
+
+  async findProviderAll(userId: number) {
+    return await this.helpResourceRepository.find({
+      where: {
+        user: { id: userId  },
+        status: Not(helpResourceStatus.UNUSED)
+      }
+    })
+  }
+
+  async findProviderAllWithStatus(userId: number, status: HelpResourceStatus) {
+    return await this.helpResourceRepository.find({
+      where: {
+        user: { id: userId  },
+        status
+      }
+    })
+  }
+
+  // update
 
   async updateStatus(id: number, status: HelpResourceStatus) {
     const hr = await this.findOneById(id)
     hr.status = status
     await this.helpResourceRepository.save(hr)
   }
+
+  // delete
 
   @HttpCode(200)
   async delete(id: number) {

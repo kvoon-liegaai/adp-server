@@ -16,7 +16,10 @@ export class User {
   nickname: string;  //昵称
 
   @Column()
-  @Exclude()
+  // 当 类 -> json 时跳过
+  @Exclude({toPlainOnly: true})
+  // 当 json -> 类时不跳过
+  @Exclude({toClassOnly: false})
   // @Column({select: false})
   password: string;  // 密码
 
@@ -64,4 +67,9 @@ export class User {
     inverseJoinColumns: [{ name: 'resource_id' }],
   })
   helpResources: HelpResource[]
+
+  toJSON():Partial<User> {
+    const {password, ...rest} = this;
+    return rest
+  }
 }

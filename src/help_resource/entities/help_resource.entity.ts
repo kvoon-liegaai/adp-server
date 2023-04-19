@@ -1,14 +1,17 @@
 import { User } from "src/user/entities/user.entity"
-import { Column, Entity,  ManyToMany,  ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm"
-import { Location } from "src/location/entity/location.entity"
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm"
+// import { Location } from "src/location/entity/location.entity"
 
-export enum HelpResourceStatus {
-  PENDING,
-  FULFILL,
-  CANCELED,
-  ONGOING,
-  DELETE
+export const helpResourceStatus = {
+  UNUSED: 0,  // 0: 无人使用
+  PENDING: 1, // 1: 接受、未开始
+  FULFILL: 2, // 2: 接受、完成
+  CANCELED: 3, // 3: 接受、取消
+  ONGOING: 4, // 4: 接受、进行中
+  DELETE: 5, // 5: 删除
 }
+
+export type HelpResourceStatus = typeof helpResourceStatus[keyof typeof helpResourceStatus]
 
 @Entity('helpResource')
 export class HelpResource {
@@ -33,7 +36,7 @@ export class HelpResource {
   @Column()
   end_date: string
 
-  @Column({type: 'enum', enum: HelpResourceStatus, default: HelpResourceStatus.PENDING})
+  @Column({type: 'int', default: helpResourceStatus.UNUSED})
   status: HelpResourceStatus
 
   @Column({
