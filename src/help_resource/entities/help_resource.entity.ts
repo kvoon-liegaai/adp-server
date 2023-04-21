@@ -1,5 +1,5 @@
 import { User } from "src/user/entities/user.entity"
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm"
+import { Column, Entity, Index, ManyToOne, PrimaryGeneratedColumn } from "typeorm"
 // import { Location } from "src/location/entity/location.entity"
 
 export const helpResourceStatus = {
@@ -24,6 +24,7 @@ export class HelpResource {
   @Column()
   subArea: string
 
+  @Index()
   @Column()
   tag: string
 
