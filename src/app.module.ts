@@ -35,6 +35,7 @@ import { EvaluationModule } from './evaluation/evaluation.module';
       // "entities": [
       //   __dirname + "entities/**/*.entity.ts"
       // ],
+      migrationsRun: true,
       // synchronize: true,
     }),
     UserModule,
@@ -58,7 +59,7 @@ import { EvaluationModule } from './evaluation/evaluation.module';
 })
 export class AppModule {
   dataSource: DataSource;
-  constructor(dataSource) {
+  constructor(dataSource: DataSource) {
     this.dataSource = dataSource;
   }
 }
