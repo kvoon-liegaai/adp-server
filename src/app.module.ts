@@ -13,7 +13,6 @@ import { ChatModule } from './chat/chat.module';
 import { HelpResourceModule } from './help_resource/help_resource.module';
 import { HelpResource } from './help_resource/entities/help_resource.entity';
 import { User } from './user/entities/user.entity';
-import { Location } from './location/entity/location.entity';
 import { DataSource } from 'typeorm';
 import { EvaluationModule } from './evaluation/evaluation.module';
 import { NotificationModule } from './notification/notification.module';

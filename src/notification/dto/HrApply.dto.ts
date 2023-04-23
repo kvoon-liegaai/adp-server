@@ -9,4 +9,8 @@ export class CreateHrApplyDto {
   @ApiProperty()
   @IsNumber()
   providerId: number
+
+  @ApiProperty()
+  @IsNumber()
+  helpResourceId: number
 }

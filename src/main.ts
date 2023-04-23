@@ -10,6 +10,8 @@ async function bootstrap() {
     whitelist: true,
   }))
 
+  app.enableCors()
+
   const options = new DocumentBuilder()
     .setTitle('aid-platform-api')
     .setDescription('description')

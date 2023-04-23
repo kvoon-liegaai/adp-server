@@ -26,7 +26,7 @@ export class NotificationService {
     const isExist = !!(await this.hrApplyRepo.findOne({
       where: {
         userId: createHrApplyDto.userId,
-        providerId: createHrApplyDto.providerId
+        helpResourceId: createHrApplyDto.helpResourceId,
       }
     }))
 
@@ -44,7 +44,5 @@ export class NotificationService {
       code: ReturnCode.success,
       message: '请求成功'
     }
-
-    // return 'This action adds a new hrApply';
   }
 }

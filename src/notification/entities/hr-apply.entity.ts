@@ -13,6 +13,10 @@ export class HrApply {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Index()
+  @Column()
+  helpResourceId: number;
+
   // @ManyToOne(() => User, { eager: true })
   @Index()
   @Column()

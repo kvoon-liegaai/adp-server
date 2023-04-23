@@ -98,6 +98,19 @@ export class HelpResourceService {
     await this.helpResourceRepository.save(hr)
   }
 
+  async addReceiver(id: number, receiverId: number) {
+    const hr = await this.findOneById(id)
+    const receiver = await this.userService.findOneById(receiverId)
+
+    if(hr.status === helpResourceStatus.UNUSED)
+      hr.status = helpResourceStatus.PENDING
+
+    return await this.helpResourceRepository.save({
+      ...hr,
+      receiver,
+    })
+  }
+
   // delete
 
   @HttpCode(200)

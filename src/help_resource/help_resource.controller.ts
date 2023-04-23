@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, ParseIntPipe, Param, Delete, Req, HttpException, HttpStatus } from '@nestjs/common';
+import { Controller, Post, Body, Get, ParseIntPipe, Param, Delete, Req, HttpException, HttpStatus, Patch } from '@nestjs/common';
 import { HelpResourceService } from './help_resource.service';
 import { CreateHelpResourceDto } from './dto/create-help_resource.dto';
 import { HelpResourceStatus } from './entities/help_resource.entity';
@@ -9,7 +9,7 @@ export class HelpResourceController {
     private readonly helpResourceService: HelpResourceService,
   ) {}
 
-  // update
+  // create 
 
   @Post()
   async create(
@@ -22,12 +22,18 @@ export class HelpResourceController {
 
   // get 
 
+  @Get(':id')
+  async findOneById(@Param('id', ParseIntPipe) id:number) {
+    return await this.helpResourceService.findOneById(id)
+  }
+
   @Get()
   async findAll() {
     return await this.helpResourceService.findAll()
   }
 
-  @Get(':id')
+  // get userId
+  @Get('userId/:id')
   async findAllByUserId(@Param('id', ParseIntPipe) id:number) {
     return await this.helpResourceService.findAllByUserId(id)
   }
@@ -76,6 +82,12 @@ export class HelpResourceController {
     return await this.helpResourceService.findProviderAllWithStatus(id, status)
   }
 
+  // update
+
+  @Patch(':id/receiver/:receiverId')
+  async addReceiver(@Param('id', ParseIntPipe) id: number, @Param('receiverId', ParseIntPipe) receiverId: number) {
+    return await this.helpResourceService.addReceiver(id, receiverId);
+  }
   // delete
 
   @Delete(':id')
