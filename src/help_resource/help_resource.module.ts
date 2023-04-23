@@ -7,11 +7,13 @@ import { UserModule } from 'src/user/user.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([HelpResource]),
-    UserModule
+    TypeOrmModule.forFeature([
+      HelpResource,
+    ]),
+    UserModule,
   ],
   controllers: [HelpResourceController],
-  providers: [HelpResourceService],
+  providers: [HelpResourceService ],
   exports: [HelpResourceService],
 })
 export class HelpResourceModule {}

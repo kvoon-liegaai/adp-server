@@ -16,6 +16,8 @@ import { User } from './user/entities/user.entity';
 import { Location } from './location/entity/location.entity';
 import { DataSource } from 'typeorm';
 import { EvaluationModule } from './evaluation/evaluation.module';
+import { NotificationModule } from './notification/notification.module';
+import { HrApply } from './notification/entities/hr-apply.entity';
 
 @Dependencies(DataSource)
 @Module({
@@ -31,10 +33,11 @@ import { EvaluationModule } from './evaluation/evaluation.module';
       // password: '1',
       password: '1234',
       database: 'aid-platform-db',
-      entities: [ User, HelpResource, Location ],
+      entities: [ User, HelpResource, HrApply],
       // "entities": [
       //   __dirname + "entities/**/*.entity.ts"
       // ],
+
       migrationsRun: true,
       // synchronize: true,
     }),
@@ -43,6 +46,7 @@ import { EvaluationModule } from './evaluation/evaluation.module';
     ChatModule,
     HelpResourceModule,
     EvaluationModule,
+    NotificationModule,
   ] ,
   controllers: [AppController],
   providers: [
