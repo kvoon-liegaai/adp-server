@@ -3,7 +3,7 @@ import { WebSocketGateway, SubscribeMessage, MessageBody, OnGatewayConnection, O
 import { Server, Socket } from 'socket.io';
 import { CreateHrApplyDto } from './dto/HrApply.dto';
 import { NotificationService } from './notification.service';
-import { ReturnCode } from 'src/common/ws';
+import { HelpResourceReqMsgStatus, ReturnCode } from 'src/common/ws';
 
 @WebSocketGateway(4003, {
   cors: {
@@ -46,9 +46,9 @@ export class NotificationGateway implements OnGatewayInit, OnGatewayConnection, 
 
   @SubscribeMessage('apply-hr')
   async apply(@MessageBody() createHrApplyDto: CreateHrApplyDto, @ConnectedSocket() client: Socket) {
-    const result = await this.notificationService.create(createHrApplyDto)
+    const result = await this.notificationService.createHrApply(createHrApplyDto)
 
-    // 获取要发送给的用户的请求
+    // 如果接收方在线，立即发送消息
     if(result.code === ReturnCode.success) {
       const providerClient = this.clients.get(String(createHrApplyDto.providerId))
       if(providerClient) {
@@ -59,8 +59,8 @@ export class NotificationGateway implements OnGatewayInit, OnGatewayConnection, 
     return result
   }
 
-  @SubscribeMessage('agree')
-  agree() {
-    return 
+  @SubscribeMessage('update-hr')
+  async reject(@MessageBody() msgBody: { helpResourceId: number, userId: number, status: HelpResourceReqMsgStatus }, @ConnectedSocket() client: Socket) {
+    return await this.notificationService.updateHrApplyStatus(msgBody.helpResourceId, msgBody.userId, msgBody.status)
   }
 }

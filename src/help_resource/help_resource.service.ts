@@ -35,8 +35,11 @@ export class HelpResourceService {
     return await this.helpResourceRepository.find();
   }
 
-  async findOneById(id: number) {
-    const hr = await this.helpResourceRepository.findOneBy({ id })
+  async findOneById(id: number, relations: string[] = []) {
+    const hr = await this.helpResourceRepository.findOne({
+      where: {id},
+      relations,
+    })
 
     if(!hr) {
       throw new HttpException('互助资源不存在', HttpStatus.NO_CONTENT)
@@ -90,7 +93,7 @@ export class HelpResourceService {
     })
   }
 
-  // update
+  // patch
 
   async updateStatus(id: number, status: HelpResourceStatus) {
     const hr = await this.findOneById(id)
@@ -99,15 +102,11 @@ export class HelpResourceService {
   }
 
   async addReceiver(id: number, receiverId: number) {
-    const hr = await this.findOneById(id)
     const receiver = await this.userService.findOneById(receiverId)
 
-    if(hr.status === helpResourceStatus.UNUSED)
-      hr.status = helpResourceStatus.PENDING
-
-    return await this.helpResourceRepository.save({
-      ...hr,
+    return await this.helpResourceRepository.update({id}, {
       receiver,
+      status: helpResourceStatus.PENDING,
     })
   }
 

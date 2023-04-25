@@ -82,19 +82,16 @@ export class HelpResourceController {
     return await this.helpResourceService.findProviderAllWithStatus(id, status)
   }
 
-  // update
-
-  @Patch(':id/receiver/:receiverId')
-  async addReceiver(@Param('id', ParseIntPipe) id: number, @Param('receiverId', ParseIntPipe) receiverId: number) {
-    return await this.helpResourceService.addReceiver(id, receiverId);
-  }
   // delete
 
   @Delete(':id')
   async delete(@Param('id', ParseIntPipe, ) id:number, @Req() req:any){
-    const res = await this.helpResourceService.findOneById(id)
-    if(res.user === req.user.id)
-      await this.helpResourceService.delete(id)
+    const hr = await this.helpResourceService.findOneById(id, ['user'])
+    console.log('id',id)
+    console.log('hr.user',hr.user)
+    console.log('req.user.id',req.user.id)
+    if(hr.user.id === req.user.id)
+      return await this.helpResourceService.delete(id)
     else
       throw new HttpException('无权删除', HttpStatus.NOT_ACCEPTABLE)
   }

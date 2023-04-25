@@ -1,12 +1,5 @@
+import { helpResourceApplyMsgState, HelpResourceReqMsgStatus } from 'src/common/ws';
 import { Entity, Column, PrimaryGeneratedColumn, Index } from 'typeorm';
-
-export const helpResourceReqMsgState = {
-  PENDING: 0, // 待处理
-  FULFILLED: 1, // 接收
-  REJECTED: 2, // 拒绝
-}
-
-export type HelpResourceReqMsgStatus = typeof helpResourceReqMsgState[keyof typeof helpResourceReqMsgState]
 
 @Entity("HrApply")
 export class HrApply {
@@ -27,7 +20,7 @@ export class HrApply {
   @Column()
   userId: number;
 
-  @Column({ type: 'int', default: () => helpResourceReqMsgState.PENDING })
+  @Column({ type: 'int', default: () => helpResourceApplyMsgState.PENDING })
   status: HelpResourceReqMsgStatus;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })

@@ -1,6 +1,7 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ReturnCode, WsRes } from 'src/common/ws';
+import { helpResourceApplyMsgState, HelpResourceReqMsgStatus, ReturnCode, WsRes } from 'src/common/ws';
+import { HelpResourceService } from 'src/help_resource/help_resource.service';
 import { Repository } from 'typeorm';
 import { CreateHrApplyDto } from './dto/HrApply.dto';
 import { HrApply } from './entities/hr-apply.entity';
@@ -12,8 +13,12 @@ export class NotificationService {
   constructor(
     @InjectRepository(HrApply)
     private hrApplyRepo: Repository<HrApply>,
+    @Inject(HelpResourceService)
+    private readonly helpResourceService: HelpResourceService
   ) {}
-  async create(createHrApplyDto: CreateHrApplyDto): Promise<WsRes> {
+
+  // 创建获取服务申请
+  async createHrApply(createHrApplyDto: CreateHrApplyDto): Promise<WsRes> {
     this.logger.debug('createHrApplyDto',createHrApplyDto)
 
     if(createHrApplyDto.providerId === createHrApplyDto.userId) {
@@ -23,19 +28,19 @@ export class NotificationService {
       }
     }
 
-    const isExist = !!(await this.hrApplyRepo.findOne({
-      where: {
-        userId: createHrApplyDto.userId,
-        helpResourceId: createHrApplyDto.helpResourceId,
-      }
-    }))
+    // const isExist = !!(await this.hrApplyRepo.findOne({
+    //   where: {
+    //     userId: createHrApplyDto.userId,
+    //     helpResourceId: createHrApplyDto.helpResourceId,
+    //   }
+    // }))
 
-    if(isExist) {
-      return { 
-        code: ReturnCode.fail,
-        message: '不要重复请求'
-       }
-    }
+    // if(isExist) {
+    //   return { 
+    //     code: ReturnCode.fail,
+    //     message: '不要重复请求'
+    //    }
+    // }
 
     const hrApply = this.hrApplyRepo.create(createHrApplyDto)
     await this.hrApplyRepo.save(hrApply)
@@ -43,6 +48,22 @@ export class NotificationService {
     return {
       code: ReturnCode.success,
       message: '请求成功'
+    }
+  }
+
+  // 接受/拒绝申请
+  async updateHrApplyStatus(helpResourceId: number, userId: number, status: HelpResourceReqMsgStatus): Promise<WsRes> {
+    // 接受：添加 receiver
+    if(status === helpResourceApplyMsgState.FULFILLED)
+      await this.helpResourceService.addReceiver(helpResourceId, userId)
+
+    // change status
+    const data = await this.hrApplyRepo.update({ userId }, { status })
+
+    return {
+      code: ReturnCode.success,
+      message: '操作成功',
+      data
     }
   }
 }
