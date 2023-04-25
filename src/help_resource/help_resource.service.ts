@@ -80,7 +80,8 @@ export class HelpResourceService {
       where: {
         user: { id: userId  },
         status: Not(helpResourceStatus.UNUSED)
-      }
+      },
+      relations: ['receiver']
     })
   }
 

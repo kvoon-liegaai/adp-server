@@ -10,7 +10,7 @@ import { HelpResourceReqMsgStatus, ReturnCode } from 'src/common/ws';
     // 配置 socket.io polling 跨域
     origin: [
       'https://localhost:9000',
-      'https://192.168.8.105:9000'
+      'https://192.168.8.105:9000',
     ],
     methods: ["GET", "POST"],
     credentials: true,
