@@ -4,6 +4,7 @@ import { HelpResourceController } from './help_resource.controller';
 import { HelpResource } from './entities/help_resource.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from 'src/user/user.module';
+import { HrRecordModule } from 'src/hr_record/hr_record.module';
 
 @Module({
   imports: [
@@ -11,6 +12,7 @@ import { UserModule } from 'src/user/user.module';
       HelpResource,
     ]),
     UserModule,
+    HrRecordModule,
   ],
   controllers: [HelpResourceController],
   providers: [HelpResourceService ],

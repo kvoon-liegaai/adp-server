@@ -6,6 +6,7 @@ import { HelpResource, helpResourceStatus, HelpResourceStatus } from './entities
 import { UserService } from 'src/user/user.service';
 import { HrRecord } from 'src/hr_record/entities/hr_record.entity';
 import { UpdateHrRecordDto } from 'src/hr_record/dto/update-hr_record.dto';
+import { HrRecordService } from 'src/hr_record/hr_record.service';
 
 @Injectable()
 export class HelpResourceService {
@@ -14,7 +15,9 @@ export class HelpResourceService {
     @InjectRepository(HelpResource)
     private helpResourceRepository: Repository<HelpResource>,
     @Inject(UserService)
-    private userService: UserService
+    private userService: UserService,
+    @Inject(HrRecordService)
+    private hrRecordService: HrRecordService,
   ) {}
 
   // create
@@ -103,7 +106,9 @@ export class HelpResourceService {
 
   async update(id: number, partObj: DeepPartial<HelpResource>) {
     console.log('id',id)
-    return await this.helpResourceRepository.update({ id: id }, partObj)
+    console.log('partObj',partObj)
+    // return await this.helpResourceRepository.update({ id: id }, partObj)
+    return await this.helpResourceRepository.save({ id, ...partObj })
   }
   // const hr = await this.findOneById(id)
   // await this.helpResourceRepository.save({
@@ -121,17 +126,11 @@ export class HelpResourceService {
 
     // add record
     const hr = await this.findOneById(id)
-    const oldRecords = hr.records
-    const record = new HrRecord()
-    console.log('record',record)
+    await this.hrRecordService.create(hr)
 
     return await this.helpResourceRepository.update({id}, {
       receiver,
       status: helpResourceStatus.PENDING, // set status
-      records: [
-        ...oldRecords,
-        record
-      ]
     })
   }
 

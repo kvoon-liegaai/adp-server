@@ -1,5 +1,5 @@
 import { HelpResource } from "src/help_resource/entities/help_resource.entity"
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm"
+import { Column, Entity, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm"
 
 @Entity('hr_record')
 export class HrRecord {
@@ -27,8 +27,6 @@ export class HrRecord {
   })
   end_date: Date
 
-  @ManyToOne(() => HelpResource, (hr) => hr.records, {
-    cascade: true
-  })
+  @OneToOne(() => HelpResource, hr => hr.record)
   hr: HelpResource
 }

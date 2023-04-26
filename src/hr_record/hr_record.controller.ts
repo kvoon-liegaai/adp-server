@@ -7,10 +7,10 @@ import { UpdateHrRecordDto } from './dto/update-hr_record.dto';
 export class HrRecordController {
   constructor(private readonly hrRecordService: HrRecordService) {}
 
-  @Post()
-  create(@Body() createHrRecordDto: CreateHrRecordDto) {
-    return this.hrRecordService.create(createHrRecordDto);
-  }
+  // @Post()
+  // create(@Body() createHrRecordDto: CreateHrRecordDto) {
+  //   return this.hrRecordService.create(createHrRecordDto);
+  // }
 
 
   @Get(':id')

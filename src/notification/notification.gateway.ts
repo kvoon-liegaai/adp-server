@@ -72,6 +72,7 @@ export class NotificationGateway implements OnGatewayInit, OnGatewayConnection, 
     return await this.notificationService.updateHrApplyStatus(msgBody.helpResourceId, msgBody.userId, msgBody.status)
   }
 
+  // 更新
   // provider to receiver
   @SubscribeMessage('update-hr')
   async updateHr(@MessageBody() msgBody: { helpResourceId: number, status: HelpResourceStatus}) {

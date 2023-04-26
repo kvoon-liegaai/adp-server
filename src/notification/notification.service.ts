@@ -1,11 +1,12 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { helpResourceApplyMsgState, HelpResourceReqMsgStatus, ReturnCode, WsRes } from 'src/common/ws';
-import { helpResourceStatus, HelpResourceStatus } from 'src/help_resource/entities/help_resource.entity';
+import { HelpResource, helpResourceStatus, HelpResourceStatus } from 'src/help_resource/entities/help_resource.entity';
 import { HelpResourceService } from 'src/help_resource/help_resource.service';
-import { Repository } from 'typeorm';
+import { DeepPartial, Repository } from 'typeorm';
 import { CreateHrApplyDto } from './dto/HrApply.dto';
 import { HrApply } from './entities/hr-apply.entity';
+import { HrRecordService } from 'src/hr_record/hr_record.service';
 // import { UpdateHrApplyDto } from './dto/handle-apply-apply.dto';
 
 @Injectable()
@@ -15,7 +16,9 @@ export class NotificationService {
     @InjectRepository(HrApply)
     private hrApplyRepo: Repository<HrApply>,
     @Inject(HelpResourceService)
-    private readonly helpResourceService: HelpResourceService
+    private readonly helpResourceService: HelpResourceService,
+    @Inject(HrRecordService)
+    private hrRecordService: HrRecordService,
   ) {}
 
   // 创建获取服务申请
@@ -75,27 +78,34 @@ export class NotificationService {
 
   async updateHrStatus(helpResourceId: number,  status: HelpResourceStatus) {
     this.logger.debug(status)
+    const updateModel: DeepPartial<HelpResource> = {
+      status
+    }
     switch(status) {
-      case helpResourceStatus.ONGOING:
-        // code here
-        // await this.helpResourceService.addRecord(helpResourceId)
+      case helpResourceStatus.ONGOING:{
+        updateModel.record = {
+          start_date: new Date(),
+        }
         break;
+      }
+        // await this.helpResourceService.addRecord(helpResourceId)
+        // await this.hrRecordService.update()
       case helpResourceStatus.CANCELED:
-        // code here
+        updateModel.record = {
+          end_date: new Date(),
+        }
         break;
       case helpResourceStatus.DELETE:
-        // code here
         break;
       case helpResourceStatus.FULFILL:
-        // code here
+        updateModel.record.end_date = new Date()
         break;
       default:
-        // default code here
         break;
     }
 
     // change state
-    await this.helpResourceService.update(helpResourceId, { status: status })
+    await this.helpResourceService.update(helpResourceId, updateModel)
 
     return {
       code: ReturnCode.success,
