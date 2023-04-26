@@ -1,9 +1,11 @@
-import { Logger } from '@nestjs/common';
+import { Inject, Logger } from '@nestjs/common';
 import { WebSocketGateway, SubscribeMessage, MessageBody, OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit, WebSocketServer, ConnectedSocket } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { CreateHrApplyDto } from './dto/HrApply.dto';
 import { NotificationService } from './notification.service';
-import { HelpResourceReqMsgStatus, ReturnCode } from 'src/common/ws';
+import { helpResourceApplyMsgState, HelpResourceReqMsgStatus, ReturnCode } from 'src/common/ws';
+import { HelpResourceStatus, helpResourceStatus } from 'src/help_resource/entities/help_resource.entity';
+import { HelpResourceService } from 'src/help_resource/help_resource.service';
 
 @WebSocketGateway(4003, {
   cors: {
@@ -18,7 +20,11 @@ import { HelpResourceReqMsgStatus, ReturnCode } from 'src/common/ws';
 })
 export class NotificationGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
   private readonly logger = new Logger()
-  constructor(private readonly notificationService: NotificationService) {}
+  constructor(
+    private readonly notificationService: NotificationService,
+    @Inject(HelpResourceService)
+    private readonly helpResourceService: HelpResourceService,
+  ) {}
 
   @WebSocketServer()
   server: Server;
@@ -44,6 +50,7 @@ export class NotificationGateway implements OnGatewayInit, OnGatewayConnection, 
     this.clients.delete(client.id);
   }
 
+  // 发送申请
   @SubscribeMessage('apply-hr')
   async apply(@MessageBody() createHrApplyDto: CreateHrApplyDto, @ConnectedSocket() client: Socket) {
     const result = await this.notificationService.createHrApply(createHrApplyDto)
@@ -59,8 +66,29 @@ export class NotificationGateway implements OnGatewayInit, OnGatewayConnection, 
     return result
   }
 
-  @SubscribeMessage('update-hr')
-  async reject(@MessageBody() msgBody: { helpResourceId: number, userId: number, status: HelpResourceReqMsgStatus }, @ConnectedSocket() client: Socket) {
+  // 处理申请
+  @SubscribeMessage('handle-apply')
+  async handleApply(@MessageBody() msgBody: { helpResourceId: number, userId: number, status: HelpResourceReqMsgStatus }, @ConnectedSocket() client: Socket) {
     return await this.notificationService.updateHrApplyStatus(msgBody.helpResourceId, msgBody.userId, msgBody.status)
+  }
+
+  // provider to receiver
+  @SubscribeMessage('update-hr')
+  async updateHr(@MessageBody() msgBody: { helpResourceId: number, status: HelpResourceStatus}) {
+    this.logger.debug(msgBody)
+    const result = await this.notificationService.updateHrStatus(msgBody.helpResourceId, msgBody.status)
+
+    // const hr = await this.helpResourceService.findOneById(msgBody.helpResourceId, ['receiver'])
+    // const receiverId = hr.receiver.id
+
+    // // ongoing -> notice receiver
+    // if(msgBody.status === helpResourceStatus.ONGOING && result.code === ReturnCode.success) {
+    //   const receiverClient = this.clients.get(String(receiverId))
+    //   if(receiverClient) {
+    //     receiverClient.emit('appoint-event', { helpResourceId: msgBody.helpResourceId, status: helpResourceStatus.ONGOING })
+    //   }
+    // }
+
+    return result
   }
 }

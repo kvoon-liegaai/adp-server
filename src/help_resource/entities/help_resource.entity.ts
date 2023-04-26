@@ -1,5 +1,6 @@
+import { HrRecord } from "src/hr_record/entities/hr_record.entity"
 import { User } from "src/user/entities/user.entity"
-import { Column, Entity, Index, ManyToOne, PrimaryGeneratedColumn } from "typeorm"
+import { Column, Entity, Index, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm"
 // import { Location } from "src/location/entity/location.entity"
 
 export const helpResourceStatus = {
@@ -60,4 +61,9 @@ export class HelpResource {
 
   @ManyToOne(() => User, (user) => user.helpResources)
   receiver?: User
+
+  @OneToMany(() => HrRecord, (hrRecord) => hrRecord.hr, {
+    eager: true
+  })
+  records: HrRecord[]
 }

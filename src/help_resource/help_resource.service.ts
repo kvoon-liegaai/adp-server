@@ -1,12 +1,15 @@
-import { HttpCode, HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { HttpCode, HttpException, HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import {  Not, Repository } from 'typeorm';
+import {  createQueryBuilder, DataSource, DeepPartial, getConnection, Not, Repository } from 'typeorm';
 import { CreateHelpResourceDto } from './dto/create-help_resource.dto';
 import { HelpResource, helpResourceStatus, HelpResourceStatus } from './entities/help_resource.entity';
 import { UserService } from 'src/user/user.service';
+import { HrRecord } from 'src/hr_record/entities/hr_record.entity';
+import { UpdateHrRecordDto } from 'src/hr_record/dto/update-hr_record.dto';
 
 @Injectable()
 export class HelpResourceService {
+  logger = new Logger()
   constructor(
     @InjectRepository(HelpResource)
     private helpResourceRepository: Repository<HelpResource>,
@@ -69,7 +72,8 @@ export class HelpResourceService {
       where: {
         receiver: { id: userId  },
         status
-      }
+      },
+      relations: ['user']
     })
   }
 
@@ -90,26 +94,66 @@ export class HelpResourceService {
       where: {
         user: { id: userId  },
         status
-      }
+      },
+      relations: ['receiver']
     })
   }
 
   // patch
 
-  async updateStatus(id: number, status: HelpResourceStatus) {
-    const hr = await this.findOneById(id)
-    hr.status = status
-    await this.helpResourceRepository.save(hr)
+  async update(id: number, partObj: DeepPartial<HelpResource>) {
+    console.log('id',id)
+    return await this.helpResourceRepository.update({ id: id }, partObj)
   }
+  // const hr = await this.findOneById(id)
+  // await this.helpResourceRepository.save({
+  //   ...hr,
+  //   ...partObj
+  // })
+  // const res = await this.helpResourceRepository.update({ id: id }, {
+  //   status: helpResourceStatus.CANCELED,
+  // })
+  // return res
 
   async addReceiver(id: number, receiverId: number) {
+    // add receiver
     const receiver = await this.userService.findOneById(receiverId)
+
+    // add record
+    const hr = await this.findOneById(id)
+    const oldRecords = hr.records
+    const record = new HrRecord()
+    console.log('record',record)
 
     return await this.helpResourceRepository.update({id}, {
       receiver,
-      status: helpResourceStatus.PENDING,
+      status: helpResourceStatus.PENDING, // set status
+      records: [
+        ...oldRecords,
+        record
+      ]
     })
   }
+
+  // async addRecord(id: number) {
+  //   const hr = await this.findOneById(id)
+  //   const oldRecords = hr.records
+  //   const record = new HrRecord()
+  //   return await this.helpResourceRepository.update({ id }, {
+  //     records: [
+  //       ...oldRecords,
+  //       record
+  //     ]
+  //   })
+  // }
+
+  // async updateRecord(id: number, updateHrRecordDto: UpdateHrRecordDto) {
+  //   const oldRecords = hr.records
+  //   oldRecords
+  //   await this.helpResourceRepository.update({ id }, {
+  //     records
+  //   })
+  // }
 
   // delete
 
