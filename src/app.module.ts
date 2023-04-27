@@ -39,8 +39,8 @@ import { HrRecord } from './hr_record/entities/hr_record.entity';
       //   __dirname + "entities/**/*.entity.ts"
       // ],
 
-      migrationsRun: true,
-      // synchronize: true,
+      // migrationsRun: true,
+      synchronize: true,
     }),
     UserModule,
     AuthModule,

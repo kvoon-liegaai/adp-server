@@ -86,26 +86,40 @@ export class NotificationService {
         updateModel.record = {
           start_date: new Date(),
         }
+        // change state
+        await this.helpResourceService.update(helpResourceId, updateModel)
         break;
       }
         // await this.helpResourceService.addRecord(helpResourceId)
         // await this.hrRecordService.update()
-      case helpResourceStatus.CANCELED:
+      case helpResourceStatus.CANCELED: {
         updateModel.record = {
           end_date: new Date(),
         }
+        // change state
+        await this.helpResourceService.update(helpResourceId, updateModel)
         break;
+      }
       case helpResourceStatus.DELETE:
         break;
-      case helpResourceStatus.FULFILL:
-        updateModel.record.end_date = new Date()
+      case helpResourceStatus.FULFILL: {
+        const hr = await this.helpResourceService.findOneById(helpResourceId)
+        this.hrRecordService.update(hr.record.id, {
+          end_date: new Date(),
+        })
+        // updateModel.record = {
+        //   end_date: new Date(),
+        // }
+        console.log('fulfill update record', updateModel.record)
         break;
+      }
       default:
         break;
     }
 
+    // TODO: !!!!!!!!!!!!!!!!
     // change state
-    await this.helpResourceService.update(helpResourceId, updateModel)
+    // await this.helpResourceService.update(helpResourceId, updateModel)
 
     return {
       code: ReturnCode.success,
