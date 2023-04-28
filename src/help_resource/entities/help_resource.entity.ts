@@ -1,3 +1,4 @@
+import { Evaluation } from "src/evaluation/entities/evaluation.entity"
 import { HrRecord } from "src/hr_record/entities/hr_record.entity"
 import { User } from "src/user/entities/user.entity"
 import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm"
@@ -68,4 +69,7 @@ export class HelpResource {
   })
   @JoinColumn()
   record: HrRecord
+
+  @OneToMany(() => Evaluation, evaluation => evaluation.hr)
+  evaluations?: Evaluation[];
 }

@@ -19,6 +19,7 @@ import { NotificationModule } from './notification/notification.module';
 import { HrApply } from './notification/entities/hr-apply.entity';
 import { HrRecordModule } from './hr_record/hr_record.module';
 import { HrRecord } from './hr_record/entities/hr_record.entity';
+import { Evaluation } from './evaluation/entities/evaluation.entity';
 
 @Dependencies(DataSource)
 @Module({
@@ -34,7 +35,7 @@ import { HrRecord } from './hr_record/entities/hr_record.entity';
       // password: '1',
       password: '1234',
       database: 'aid-platform-db',
-      entities: [ User, HelpResource, HrApply ,HrRecord],
+      entities: [ User, HelpResource, HrApply ,HrRecord, Evaluation],
       // "entities": [
       //   __dirname + "entities/**/*.entity.ts"
       // ],

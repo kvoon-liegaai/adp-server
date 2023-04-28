@@ -61,7 +61,8 @@ export class HelpResourceService {
   // find tag
 
   async findAllByTag(tag: string) {
-    return await this.helpResourceRepository.find({ where: { tag }, relations: ['user', 'receiver']})
+    const res = await this.helpResourceRepository.find({ where: { tag }, relations: ['user', 'receiver' ]})
+    return res
   }
 
   // find receiver
@@ -88,7 +89,7 @@ export class HelpResourceService {
         user: { id: userId  },
         status: Not(helpResourceStatus.UNUSED)
       },
-      relations: ['receiver']
+      relations: ['receiver', 'evaluations']
     })
   }
 
@@ -98,7 +99,7 @@ export class HelpResourceService {
         user: { id: userId  },
         status
       },
-      relations: ['receiver']
+      relations: ['receiver', 'evaluations']
     })
   }
 
@@ -108,6 +109,8 @@ export class HelpResourceService {
     console.log('id',id)
     console.log('partObj',partObj)
     // return await this.helpResourceRepository.update({ id: id }, partObj)
+    const toSave = { id, ...partObj }
+    console.log('toSave',toSave)
     return await this.helpResourceRepository.save({ id, ...partObj })
   }
   // const hr = await this.findOneById(id)

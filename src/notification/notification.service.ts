@@ -32,6 +32,7 @@ export class NotificationService {
       }
     }
 
+    // TODO(dev): 生产模式时开启
     // const isExist = !!(await this.hrApplyRepo.findOne({
     //   where: {
     //     userId: createHrApplyDto.userId,
@@ -86,27 +87,25 @@ export class NotificationService {
         updateModel.record = {
           start_date: new Date(),
         }
-        // change state
-        await this.helpResourceService.update(helpResourceId, updateModel)
         break;
       }
-        // await this.helpResourceService.addRecord(helpResourceId)
-        // await this.hrRecordService.update()
       case helpResourceStatus.CANCELED: {
-        updateModel.record = {
+        // TODO(set end_date): 完善更新方式
+        const hr = await this.helpResourceService.findOneById(helpResourceId)
+        this.hrRecordService.update(hr.record.id, {
           end_date: new Date(),
-        }
-        // change state
-        await this.helpResourceService.update(helpResourceId, updateModel)
+        })
         break;
       }
       case helpResourceStatus.DELETE:
         break;
       case helpResourceStatus.FULFILL: {
+        // TODO(set end_date): 完善更新方式
         const hr = await this.helpResourceService.findOneById(helpResourceId)
         this.hrRecordService.update(hr.record.id, {
           end_date: new Date(),
         })
+        // FIXME(set end_date): 这样更新会导致 start_date 丢失
         // updateModel.record = {
         //   end_date: new Date(),
         // }
@@ -117,9 +116,8 @@ export class NotificationService {
         break;
     }
 
-    // TODO: !!!!!!!!!!!!!!!!
     // change state
-    // await this.helpResourceService.update(helpResourceId, updateModel)
+    await this.helpResourceService.update(helpResourceId, updateModel)
 
     return {
       code: ReturnCode.success,

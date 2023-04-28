@@ -12,23 +12,23 @@ export class EvaluationController {
     return this.evaluationService.create(createEvaluationDto);
   }
 
-  @Get()
-  findAll() {
-    return this.evaluationService.findAll();
-  }
+  // @Get()
+  // findAll() {
+  //   return this.evaluationService.findAll();
+  // }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.evaluationService.findOne(+id);
-  }
+  // @Get(':id')
+  // findOne(@Param('id') id: string) {
+  //   return this.evaluationService.findOne(+id);
+  // }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateEvaluationDto: UpdateEvaluationDto) {
-    return this.evaluationService.update(+id, updateEvaluationDto);
-  }
+  // @Patch(':id')
+  // update(@Param('id') id: string, @Body() updateEvaluationDto: UpdateEvaluationDto) {
+  //   return this.evaluationService.update(+id, updateEvaluationDto);
+  // }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.evaluationService.remove(+id);
-  }
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.evaluationService.remove(+id);
+  // }
 }
