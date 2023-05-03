@@ -2,7 +2,6 @@ import { Dependencies, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
-// import { DataSource } from 'typeorm';
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
@@ -20,6 +19,10 @@ import { HrApply } from './notification/entities/hr-apply.entity';
 import { HrRecordModule } from './hr_record/hr_record.module';
 import { HrRecord } from './hr_record/entities/hr_record.entity';
 import { Evaluation } from './evaluation/entities/evaluation.entity';
+import { Chat } from './chat/entities/chat.entity';
+import { Message } from './message/entity/message.entity';
+import { MessageService } from './message/message.service';
+import { MessageModule } from './message/message.module';
 
 @Dependencies(DataSource)
 @Module({
@@ -35,21 +38,30 @@ import { Evaluation } from './evaluation/entities/evaluation.entity';
       // password: '1',
       password: '1234',
       database: 'aid-platform-db',
-      entities: [ User, HelpResource, HrApply ,HrRecord, Evaluation],
+      entities: [
+        User,
+        HelpResource,
+        HrApply,
+        HrRecord,
+        Evaluation,
+        Chat,
+        Message,
+      ],
       // "entities": [
       //   __dirname + "entities/**/*.entity.ts"
       // ],
 
-      // migrationsRun: true,
-      synchronize: true,
+      migrationsRun: true,
+      // synchronize: true,
     }),
     UserModule,
     AuthModule,
-    ChatModule,
     HelpResourceModule,
     EvaluationModule,
     NotificationModule,
     HrRecordModule,
+    ChatModule,
+    MessageModule,
   ] ,
   controllers: [AppController],
   providers: [

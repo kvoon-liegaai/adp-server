@@ -1,4 +1,5 @@
 import { HelpResource } from 'src/help_resource/entities/help_resource.entity';
+import { User } from 'src/user/entities/user.entity';
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('evaluation')
@@ -26,4 +27,8 @@ export class Evaluation {
   @ManyToOne(() => HelpResource, hr => hr.evaluations, { cascade: true })
   @JoinColumn({ name: 'hr_id' })
   hr: HelpResource;
+
+  @ManyToOne(() => User, user => user.evaluations, { eager: true })
+  @JoinColumn({ name: 'user_id' })
+  user:User
 }

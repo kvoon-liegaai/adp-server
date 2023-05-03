@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Req } from '@nestjs/common';
 import { EvaluationService } from './evaluation.service';
 import { CreateEvaluationDto } from './dto/create-evaluation.dto';
 import { UpdateEvaluationDto } from './dto/update-evaluation.dto';
@@ -8,8 +8,9 @@ export class EvaluationController {
   constructor(private readonly evaluationService: EvaluationService) {}
 
   @Post()
-  create(@Body() createEvaluationDto: CreateEvaluationDto) {
-    return this.evaluationService.create(createEvaluationDto);
+  create(@Body() createEvaluationDto: CreateEvaluationDto, @Req() req: any) {
+    const userId = Number(req.user.id)
+    return this.evaluationService.create(userId, createEvaluationDto);
   }
 
   // @Get()

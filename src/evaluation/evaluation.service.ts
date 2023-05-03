@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Evaluation } from './entities/evaluation.entity';
 import { CreateEvaluationDto } from './dto/create-evaluation.dto';
 import { HelpResourceService } from 'src/help_resource/help_resource.service';
+import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class EvaluationService {
@@ -11,16 +12,20 @@ export class EvaluationService {
     @InjectRepository(Evaluation)
     private readonly evaluationsRepository: Repository<Evaluation>,
     @Inject(HelpResourceService)
-    private readonly helpResourceService: HelpResourceService
+    private readonly helpResourceService: HelpResourceService,
+    @Inject(UserService)
+    private readonly userService: UserService
   ) {}
 
-  async create(createEvaluationDto: CreateEvaluationDto): Promise<Evaluation> {
+  async create(userId: number, createEvaluationDto: CreateEvaluationDto): Promise<Evaluation> {
+    const user = await this.userService.findOneById(userId)
     const hr = await this.helpResourceService.findOneById(createEvaluationDto.hrId)
     const evaluation = new Evaluation();
     evaluation.briefs = createEvaluationDto.briefs.join(',');
     evaluation.description = createEvaluationDto.description;
     evaluation.ratingScore = createEvaluationDto.ratingScore;
     evaluation.hr = hr;
+    evaluation.user = user
 
     const createdEvaluation = await this.evaluationsRepository.save(evaluation);
     return createdEvaluation;

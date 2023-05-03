@@ -4,6 +4,7 @@ import { EvaluationController } from './evaluation.controller';
 import { HelpResourceModule } from 'src/help_resource/help_resource.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Evaluation } from './entities/evaluation.entity';
+import { UserModule } from 'src/user/user.module';
 
 @Module({
   imports: [
@@ -11,6 +12,7 @@ import { Evaluation } from './entities/evaluation.entity';
       Evaluation
     ]),
     HelpResourceModule,
+    UserModule
   ],
   controllers: [EvaluationController],
   providers: [EvaluationService],

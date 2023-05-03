@@ -1,5 +1,7 @@
 // use/entities/user.entity.ts
 import { Exclude } from 'class-transformer';
+import { Chat } from 'src/chat/entities/chat.entity';
+import { Evaluation } from 'src/evaluation/entities/evaluation.entity';
 import { HelpResource } from 'src/help_resource/entities/help_resource.entity';
 import { Role } from 'src/role/role.enum';
 import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
@@ -67,6 +69,13 @@ export class User {
     inverseJoinColumns: [{ name: 'resource_id' }],
   })
   helpResources: HelpResource[]
+
+  @OneToMany(() => Evaluation, (evaluation) => {evaluation.user})
+  evaluations: Evaluation[]
+
+  @ManyToMany(() => Chat, chat => chat.users)
+  @JoinTable({name: 'user_chat'})
+  chats: Chat[]
 
   toJSON():Partial<User> {
     const {password, ...rest} = this;

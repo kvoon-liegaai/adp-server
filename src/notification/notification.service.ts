@@ -87,6 +87,7 @@ export class NotificationService {
         updateModel.record = {
           start_date: new Date(),
         }
+        console.log('update record(ongoing)', updateModel.record)
         break;
       }
       case helpResourceStatus.CANCELED: {
@@ -95,6 +96,7 @@ export class NotificationService {
         this.hrRecordService.update(hr.record.id, {
           end_date: new Date(),
         })
+        console.log('update record(cancel)', updateModel.record)
         break;
       }
       case helpResourceStatus.DELETE:
@@ -109,7 +111,7 @@ export class NotificationService {
         // updateModel.record = {
         //   end_date: new Date(),
         // }
-        console.log('fulfill update record', updateModel.record)
+        console.log('update record(fulfill)', updateModel.record)
         break;
       }
       default:

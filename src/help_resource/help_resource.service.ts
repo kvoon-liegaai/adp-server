@@ -1,11 +1,9 @@
 import { HttpCode, HttpException, HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import {  createQueryBuilder, DataSource, DeepPartial, getConnection, Not, Repository } from 'typeorm';
+import { DeepPartial, Not, Repository } from 'typeorm';
 import { CreateHelpResourceDto } from './dto/create-help_resource.dto';
 import { HelpResource, helpResourceStatus, HelpResourceStatus } from './entities/help_resource.entity';
 import { UserService } from 'src/user/user.service';
-import { HrRecord } from 'src/hr_record/entities/hr_record.entity';
-import { UpdateHrRecordDto } from 'src/hr_record/dto/update-hr_record.dto';
 import { HrRecordService } from 'src/hr_record/hr_record.service';
 
 @Injectable()
@@ -68,7 +66,13 @@ export class HelpResourceService {
   // find receiver
 
   async findReceiverAll(userId: number) {
-    return await this.helpResourceRepository.find({ where: { receiver: { id: userId } }})
+    return await this.helpResourceRepository.find({
+      where: {
+        receiver: { id: userId },
+        status: Not(helpResourceStatus.UNUSED)
+      },
+      relations: ['user', 'evaluations']
+    })
   }
 
   async findReceiverAllWithStatus(userId: number, status: HelpResourceStatus) {
@@ -77,7 +81,7 @@ export class HelpResourceService {
         receiver: { id: userId  },
         status
       },
-      relations: ['user']
+      relations: ['user', 'evaluations']
     })
   }
 

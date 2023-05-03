@@ -7,6 +7,7 @@ import { helpResourceApplyMsgState, HelpResourceReqMsgStatus, ReturnCode } from 
 import { HelpResourceStatus, helpResourceStatus } from 'src/help_resource/entities/help_resource.entity';
 import { HelpResourceService } from 'src/help_resource/help_resource.service';
 
+
 @WebSocketGateway(4003, {
   cors: {
     // 配置 socket.io polling 跨域
@@ -24,7 +25,9 @@ export class NotificationGateway implements OnGatewayInit, OnGatewayConnection, 
     private readonly notificationService: NotificationService,
     @Inject(HelpResourceService)
     private readonly helpResourceService: HelpResourceService,
-  ) {}
+  ) {
+    console.log(parseInt(process.env.NOTIFICATION_SOCKET_PORT))
+  }
 
   @WebSocketServer()
   server: Server;
