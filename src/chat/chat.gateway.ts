@@ -13,7 +13,7 @@ import { User } from 'src/user/entities/user.entity';
   cors: {
     // 配置 socket.io polling 跨域
     origin: [
-      'https://localhost:9000',
+      'https://localhost:3021',
       'https://192.168.8.105:9000',
     ],
     methods: ["GET", "POST"],

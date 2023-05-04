@@ -126,4 +126,9 @@ export class NotificationService {
       message: '操作成功'
     }
   }
+
+  async findAllHrApplyByProviderId(providerId: number) {
+    const hrApplyList = await this.hrApplyRepo.find({ where: { providerId } })
+    return hrApplyList
+  }
 }

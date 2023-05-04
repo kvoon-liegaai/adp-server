@@ -3,16 +3,17 @@ import { WebSocketGateway, SubscribeMessage, MessageBody, OnGatewayConnection, O
 import { Server, Socket } from 'socket.io';
 import { CreateHrApplyDto } from './dto/HrApply.dto';
 import { NotificationService } from './notification.service';
-import { helpResourceApplyMsgState, HelpResourceReqMsgStatus, ReturnCode } from 'src/common/ws';
-import { HelpResourceStatus, helpResourceStatus } from 'src/help_resource/entities/help_resource.entity';
+import { HelpResourceReqMsgStatus, ReturnCode } from 'src/common/ws';
+import { HelpResourceStatus } from 'src/help_resource/entities/help_resource.entity';
 import { HelpResourceService } from 'src/help_resource/help_resource.service';
+import { UserService } from 'src/user/user.service';
 
 
 @WebSocketGateway(4003, {
   cors: {
     // 配置 socket.io polling 跨域
     origin: [
-      'https://localhost:9000',
+      'https://localhost:3021',
       'https://192.168.8.105:9000',
     ],
     methods: ["GET", "POST"],
@@ -25,6 +26,8 @@ export class NotificationGateway implements OnGatewayInit, OnGatewayConnection, 
     private readonly notificationService: NotificationService,
     @Inject(HelpResourceService)
     private readonly helpResourceService: HelpResourceService,
+    @Inject(UserService)
+    private readonly userService: UserService
   ) {
     console.log(parseInt(process.env.NOTIFICATION_SOCKET_PORT))
   }
@@ -94,5 +97,12 @@ export class NotificationGateway implements OnGatewayInit, OnGatewayConnection, 
     // }
 
     return result
+  }
+
+  @SubscribeMessage('fetch-all-hrApply')
+  async fetchAllHrApply(@MessageBody() msgBody: { providerId: number }) {
+    this.logger.debug(msgBody)
+    const { providerId } = msgBody
+    return await this.notificationService.findAllHrApplyByProviderId(providerId)
   }
 }
