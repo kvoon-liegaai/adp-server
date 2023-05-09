@@ -103,6 +103,19 @@ export class NotificationGateway implements OnGatewayInit, OnGatewayConnection, 
   async fetchAllHrApply(@MessageBody() msgBody: { providerId: number }) {
     this.logger.debug(msgBody)
     const { providerId } = msgBody
-    return await this.notificationService.findAllHrApplyByProviderId(providerId)
+    const hrApplyList = await this.notificationService.findAllHrApplyByProviderId(providerId)
+    console.log('providerId',providerId)
+    console.log('hrApplyList',hrApplyList)
+    const res: any = []
+    for(let i = 0; i < hrApplyList.length; i++) {
+      const user = await this.userService.findOneById(hrApplyList[i].userId)
+      const hr = await this.helpResourceService.findOneById(hrApplyList[i].helpResourceId)
+      res.push({
+        hrApply: hrApplyList[i],
+        user,
+        hr,
+      })
+    }
+    return res
   }
 }
