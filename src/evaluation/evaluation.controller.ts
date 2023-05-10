@@ -8,9 +8,14 @@ export class EvaluationController {
   constructor(private readonly evaluationService: EvaluationService) {}
 
   @Post()
-  create(@Body() createEvaluationDto: CreateEvaluationDto, @Req() req: any) {
+  async create(@Body() createEvaluationDto: CreateEvaluationDto, @Req() req: any) {
     const userId = Number(req.user.id)
-    return this.evaluationService.create(userId, createEvaluationDto);
+    return await this.evaluationService.create(userId, createEvaluationDto);
+  }
+
+  @Get()
+  async findAllEvaluation(@Req() req) {
+    return await this.evaluationService.findAllByUserId(req.user.id)
   }
 
   // @Get()

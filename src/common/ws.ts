@@ -4,10 +4,10 @@ export enum ReturnCode {
   error = 2,
 }
 
-export interface WsRes {
+export interface WsRes<T = any> {
   code: number
   message: string
-  data?: any
+  data?: T
 }
 
 // 资源请求消息

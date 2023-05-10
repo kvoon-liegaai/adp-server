@@ -65,7 +65,7 @@ export class NotificationGateway implements OnGatewayInit, OnGatewayConnection, 
     if(result.code === ReturnCode.success) {
       const providerClient = this.clients.get(String(createHrApplyDto.providerId))
       if(providerClient) {
-        providerClient.emit('apply-hr', { userId: createHrApplyDto.userId, helpResourceId: createHrApplyDto.helpResourceId })
+        providerClient.emit('apply-hr', { hrApplyId: result.data.id, userId: createHrApplyDto.userId, helpResourceId: createHrApplyDto.helpResourceId })
       }
     }
 
@@ -74,8 +74,8 @@ export class NotificationGateway implements OnGatewayInit, OnGatewayConnection, 
 
   // 处理申请
   @SubscribeMessage('handle-apply')
-  async handleApply(@MessageBody() msgBody: { helpResourceId: number, userId: number, status: HelpResourceReqMsgStatus }, @ConnectedSocket() client: Socket) {
-    return await this.notificationService.updateHrApplyStatus(msgBody.helpResourceId, msgBody.userId, msgBody.status)
+  async handleApply(@MessageBody() msgBody: { hrApplyId: number, helpResourceId: number, userId: number,  status: HelpResourceReqMsgStatus }, @ConnectedSocket() client: Socket) {
+    return await this.notificationService.updateHrApplyStatus(msgBody.hrApplyId, msgBody.helpResourceId, msgBody.userId, msgBody.status)
   }
 
   // 更新

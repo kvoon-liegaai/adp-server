@@ -1,10 +1,11 @@
-import { Controller,  Post, Body,  Inject, Get, Param, UseInterceptors, ClassSerializerInterceptor } from '@nestjs/common';
+import { Controller,  Post, Body,  Inject, Get, Param, UseInterceptors, ClassSerializerInterceptor, Patch, Req } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { User } from './entities/user.entity';
 import { Public } from 'src/decorator/public.decorator';
 import { ParseIntPipe } from '@nestjs/common'; 
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('user')
 export class UserController {
@@ -32,5 +33,10 @@ export class UserController {
     const user = await this.userService.getProfileByUserId(id);
     console.log('user',user)
     return user
+  }
+
+  @Patch()
+  async updateUser(@Body() updateUser: UpdateUserDto, @Req() req) {
+    return await this.userService.updateUser(req.user.id, updateUser)
   }
 }

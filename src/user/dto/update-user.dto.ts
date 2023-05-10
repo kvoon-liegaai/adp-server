@@ -5,5 +5,13 @@ import { CreateUserDto } from './create-user.dto';
 export class UpdateUserDto extends PartialType(CreateUserDto) {
   @ApiProperty()
   @IsString()
+  nickname: string
+
+  @ApiProperty()
+  @IsString()
+  email: string
+
+  @ApiProperty()
+  @IsString()
   describe: string
 }

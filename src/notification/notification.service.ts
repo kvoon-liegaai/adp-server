@@ -22,7 +22,7 @@ export class NotificationService {
   ) {}
 
   // 创建获取服务申请
-  async createHrApply(createHrApplyDto: CreateHrApplyDto): Promise<WsRes> {
+  async createHrApply(createHrApplyDto: CreateHrApplyDto): Promise<WsRes<HrApply>> {
     this.logger.debug('createHrApplyDto',createHrApplyDto)
 
     if(createHrApplyDto.providerId === createHrApplyDto.userId) {
@@ -48,17 +48,18 @@ export class NotificationService {
     // }
 
     const hrApply = this.hrApplyRepo.create(createHrApplyDto)
-    await this.hrApplyRepo.save(hrApply)
+    const saved = await this.hrApplyRepo.save(hrApply)
 
     return {
       code: ReturnCode.success,
-      message: '请求成功'
+      message: '请求成功',
+      data: saved,
     }
   }
 
   // 接受/拒绝申请
   // userId: receiver id
-  async updateHrApplyStatus(helpResourceId: number, userId: number, status: HelpResourceReqMsgStatus): Promise<WsRes> {
+  async updateHrApplyStatus(hrApplyId: number, helpResourceId: number, userId: number, status: HelpResourceReqMsgStatus): Promise<WsRes> {
     // 接受：添加 receiver
     if(status === helpResourceApplyMsgState.FULFILLED)
       await this.helpResourceService.addReceiver(helpResourceId, userId)
@@ -68,7 +69,8 @@ export class NotificationService {
     // 删除
 
     // change status
-    const data = await this.hrApplyRepo.update({ userId }, { status })
+    console.log('handle change status, id', hrApplyId)
+    const data = await this.hrApplyRepo.update({ id: hrApplyId }, { status })
 
     return {
       code: ReturnCode.success,

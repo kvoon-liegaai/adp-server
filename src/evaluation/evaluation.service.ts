@@ -5,6 +5,7 @@ import { Evaluation } from './entities/evaluation.entity';
 import { CreateEvaluationDto } from './dto/create-evaluation.dto';
 import { HelpResourceService } from 'src/help_resource/help_resource.service';
 import { UserService } from 'src/user/user.service';
+import { relative } from 'path';
 
 @Injectable()
 export class EvaluationService {
@@ -37,6 +38,17 @@ export class EvaluationService {
 
   async findOne(id: number): Promise<Evaluation> {
     return await this.evaluationsRepository.findOne({ where: { id } });
+  }
+
+  async findAllByUserId(userId: number) {
+    return await this.evaluationsRepository.find({
+      where: {
+        user: {
+          id: userId
+        }
+      },
+      relations: ['hr']
+    })
   }
 
   async update(
