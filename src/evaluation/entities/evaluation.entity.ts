@@ -35,3 +35,4 @@ export class Evaluation {
   @Column()
   targetUserId: number
 }
+
