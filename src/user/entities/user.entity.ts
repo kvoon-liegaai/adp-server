@@ -88,6 +88,3 @@ export class User {
     return rest
   }
 }
-
-//j似懂非懂斯诺克积分卢卡斯积分拉德克斯拉萨大家发拿手机发；发静安寺 
-// test
