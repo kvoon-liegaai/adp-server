@@ -51,8 +51,8 @@ import { MessageModule } from './message/message.module';
       //   __dirname + "entities/**/*.entity.ts"
       // ],
 
-      migrationsRun: true,
-      // synchronize: true,
+      // migrationsRun: true,
+      synchronize: true,
     }),
     UserModule,
     AuthModule,

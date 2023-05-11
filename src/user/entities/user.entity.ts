@@ -46,6 +46,12 @@ export class User {
   @Column({default: ''})
   describe: string
 
+  @Column()
+  ratingScoreSum: number
+
+  @Column()
+  serviceTimes: number
+
   @Column({
     name: 'create_time',
     type: 'timestamp',

@@ -31,4 +31,7 @@ export class Evaluation {
   @ManyToOne(() => User, user => user.evaluations, { eager: true })
   @JoinColumn({ name: 'user_id' })
   user:User
+
+  @Column()
+  targetUserId: number
 }

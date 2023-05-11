@@ -27,6 +27,7 @@ export class EvaluationService {
     evaluation.ratingScore = createEvaluationDto.ratingScore;
     evaluation.hr = hr;
     evaluation.user = user
+    evaluation.targetUserId = createEvaluationDto.targetUserId
 
     const createdEvaluation = await this.evaluationsRepository.save(evaluation);
     return createdEvaluation;
