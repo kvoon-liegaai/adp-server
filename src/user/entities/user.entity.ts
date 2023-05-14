@@ -46,10 +46,7 @@ export class User {
   @Column({default: ''})
   describe: string
 
-  @Column()
-  ratingScoreSum: number
-
-  @Column()
+  @Column({default: 0})
   serviceTimes: number
 
   @Column({

@@ -31,7 +31,6 @@ export class UserController {
     console.log('id',id)
 
     const user = await this.userService.getProfileByUserId(id);
-    console.log('user',user)
     return user
   }
 

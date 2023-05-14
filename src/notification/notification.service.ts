@@ -7,6 +7,7 @@ import { DeepPartial, Repository } from 'typeorm';
 import { CreateHrApplyDto } from './dto/HrApply.dto';
 import { HrApply } from './entities/hr-apply.entity';
 import { HrRecordService } from 'src/hr_record/hr_record.service';
+import { UserService } from 'src/user/user.service';
 // import { UpdateHrApplyDto } from './dto/handle-apply-apply.dto';
 
 @Injectable()
@@ -19,6 +20,8 @@ export class NotificationService {
     private readonly helpResourceService: HelpResourceService,
     @Inject(HrRecordService)
     private hrRecordService: HrRecordService,
+    @Inject(UserService)
+    private userService: UserService,
   ) {}
 
   // 创建获取服务申请
@@ -105,15 +108,19 @@ export class NotificationService {
         break;
       case helpResourceStatus.FULFILL: {
         // TODO(set end_date): 完善更新方式
-        const hr = await this.helpResourceService.findOneById(helpResourceId)
-        this.hrRecordService.update(hr.record.id, {
+        const hr = await this.helpResourceService.findOneById(helpResourceId, ['user'])
+        await this.hrRecordService.update(hr.record.id, {
           end_date: new Date(),
+        })
+        await this.userService.updateUser(hr.user.id, {
+          ...hr.user,
+          serviceTimes: hr.user.serviceTimes + 1,
         })
         // FIXME(set end_date): 这样更新会导致 start_date 丢失
         // updateModel.record = {
         //   end_date: new Date(),
         // }
-        console.log('update record(fulfill)', updateModel.record)
+        // console.log('update record(fulfill)', updateModel.record)
         break;
       }
       default:

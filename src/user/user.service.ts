@@ -59,7 +59,6 @@ export class UserService {
     if(!user) {
       throw new HttpException('用户不存在', HttpStatus.NO_CONTENT)
     }
-    console.log('user',user)
     return user
   }
 

@@ -15,6 +15,7 @@ import { UserService } from 'src/user/user.service';
     origin: [
       'https://localhost:3021',
       'https://192.168.8.105:9000',
+      'https://192.168.8.105:3021',
       'https://192.168.0.153:3021',
     ],
     methods: ["GET", "POST"],

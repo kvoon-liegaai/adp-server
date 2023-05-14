@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Req, Query } from '@nestjs/common';
 import { EvaluationService } from './evaluation.service';
 import { CreateEvaluationDto } from './dto/create-evaluation.dto';
 import { UpdateEvaluationDto } from './dto/update-evaluation.dto';
@@ -16,6 +16,11 @@ export class EvaluationController {
   @Get()
   async findAllEvaluation(@Req() req) {
     return await this.evaluationService.findAllByUserId(req.user.id)
+  }
+
+  @Get(':targetUserId')
+  async getAverageScore(@Param('targetUserId') id: string) {
+    return await this.evaluationService.getAverageScore(+id)
   }
 
   // @Get()

@@ -52,6 +52,32 @@ export class EvaluationService {
     })
   }
 
+  async getAverageScore(targetUserId: number) {
+    let count = 0
+    let score = 0
+    const evaluations =  await this.evaluationsRepository.find({
+      where: {
+        targetUserId
+      }
+    })
+
+    if(!evaluations.length)
+      return 0
+
+    evaluations.forEach(evaluation => {
+      if(evaluation.ratingScore) {
+        score += evaluation.ratingScore
+        count += 1
+        console.log('evaluation.ratingScore',evaluation.ratingScore)
+        console.log('score',score)
+        console.log('count',count)
+      }
+    })
+    const averageScore = score / count
+    console.log('averageScore',averageScore)
+    return Math.floor(averageScore)
+  }
+
   async update(
     id: number,
     updateEvaluationDto: CreateEvaluationDto,
