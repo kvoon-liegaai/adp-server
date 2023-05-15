@@ -35,20 +35,19 @@ export class NotificationService {
       }
     }
 
-    // TODO(dev): 生产模式时开启
-    // const isExist = !!(await this.hrApplyRepo.findOne({
-    //   where: {
-    //     userId: createHrApplyDto.userId,
-    //     helpResourceId: createHrApplyDto.helpResourceId,
-    //   }
-    // }))
+    const isExist = !!(await this.hrApplyRepo.findOne({
+      where: {
+        userId: createHrApplyDto.userId,
+        helpResourceId: createHrApplyDto.helpResourceId,
+      }
+    }))
 
-    // if(isExist) {
-    //   return { 
-    //     code: ReturnCode.fail,
-    //     message: '不要重复请求'
-    //    }
-    // }
+    if(isExist) {
+      return { 
+        code: ReturnCode.fail,
+        message: '不要重复请求'
+       }
+    }
 
     const hrApply = this.hrApplyRepo.create(createHrApplyDto)
     const saved = await this.hrApplyRepo.save(hrApply)

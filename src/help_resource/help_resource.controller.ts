@@ -2,6 +2,7 @@ import { Controller, Post, Body, Get, ParseIntPipe, Param, Delete, Req, HttpExce
 import { HelpResourceService } from './help_resource.service';
 import { CreateHelpResourceDto } from './dto/create-help_resource.dto';
 import { HelpResourceStatus } from './entities/help_resource.entity';
+import { QuickMatchDto } from './dto/quickMatch.dto';
 
 @Controller('help-resource')
 export class HelpResourceController {
@@ -30,6 +31,11 @@ export class HelpResourceController {
   @Get()
   async findAll() {
     return await this.helpResourceService.findAll()
+  }
+
+  @Post('quick-match')
+  async quickMatch(@Body() quickMatchDto: QuickMatchDto) {
+    return await this.helpResourceService.quickMatch(quickMatchDto)
   }
 
   // get userId

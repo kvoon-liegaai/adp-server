@@ -15,11 +15,6 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
   @IsString()
   describe: string
 
-
-  @ApiProperty()
-  @IsNumber()
-  ratingScoreSum: number
-
   @ApiProperty()
   @IsNumber()
   serviceTimes: number

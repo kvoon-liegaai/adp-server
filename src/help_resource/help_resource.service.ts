@@ -5,6 +5,7 @@ import { CreateHelpResourceDto } from './dto/create-help_resource.dto';
 import { HelpResource, helpResourceStatus, HelpResourceStatus } from './entities/help_resource.entity';
 import { UserService } from 'src/user/user.service';
 import { HrRecordService } from 'src/hr_record/hr_record.service';
+import { QuickMatchDto } from './dto/quickMatch.dto';
 
 @Injectable()
 export class HelpResourceService {
@@ -37,6 +38,39 @@ export class HelpResourceService {
 
   async findAll() {
     return await this.helpResourceRepository.find();
+  }
+
+  async quickMatch(quickMatchDto: QuickMatchDto) {
+    const { subArea, start_date, end_date, longitude, latitude, radius } = quickMatchDto
+    // Get all help resources
+    const allResources = await this.helpResourceRepository.find({
+      where: {
+        subArea,
+        status: helpResourceStatus.UNUSED,
+      }
+    });
+
+    // // Filter by matching subArea and start/end date
+    // const filteredResources = allResources.filter(resource => {
+    //   return (
+    //     resource.subArea === subArea &&
+    //     resource.start_date >= start_date &&
+    //     resource.end_date <= end_date
+    //   );
+    // });
+
+    // // Filter again to include only resources within radius
+    // const matchingResources = filteredResources.filter(resource => {
+    //   const distance = getDistanceFromLatLonInKm(
+    //     latitude,
+    //     longitude,
+    //     resource.latitude,
+    //     resource.longitude
+    //   );
+    //   return distance <= radius;
+    // });
+
+    return allResources;
   }
 
   async findOneById(id: number, relations: string[] = []) {
