@@ -47,7 +47,8 @@ export class HelpResourceService {
       where: {
         subArea,
         status: helpResourceStatus.UNUSED,
-      }
+      },
+      relations: ['user']
     });
 
     // // Filter by matching subArea and start/end date
